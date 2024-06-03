@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/layout :: head}">
+</head>
+<style>
+    .table td img {
+        width: 80px;
+        height: 50px;
+        background: none !important; /* Eliminar el fondo de la imagen */
+        border: none; /* Eliminar cualquier borde */
+    }
+    .table thead th,
+    .table tbody td {
+        text-align: center; /* Centrar el contenido de las columnas */
+    }
+    .total-amount {
+        text-align: right; /* Alinear el total a la derecha */
+        width: 100%; /* Asegurar que el contenedor ocupe todo el ancho */
+    }
+.rating {
+  display: flex;
+  flex-direction: row-reverse; /* Cambia la dirección de las estrellas de derecha a izquierda */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  color: gray;
+}
+
+.rating i {
+  cursor: pointer;
+  font-size: 32px; /* Tamaño de fuente más grande */
+}
+
+.rating i:hover,
+.rating i:hover ~ i {
+  color: gold;
+}
+
+.rating i.selected,
+.rating i.selected ~ i {
+  color: gold;
+}
+</style>
+<body>
+<header th:replace="~{layout/layout :: header}">
+</header>
+<div class="container-fluid bg-light py-3">
+    <div class="row">
+        <div class="col-md-6 m-auto text-center">
+            <div class="row p-2 pb-3">
+                <h1 class="h1 text-success"><strong>Detalles de la compra</strong></h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container py-4">
+    <div class="card bg-light">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="m-0 text-center text-success"> Factura </h4>
+            <h4>
+                <a th:href="@{'/invoice/pdf/'+${purchase.id}(format=pdf)}" class="text-success">
+                    descargar <img th:src="@{/assets/img/pdf.png}" class="img-responsive mx-2" style="width: 30px; height: 30px;"/>
+                </a>
+            </h4>
+            <h4><a class="text-success" th:href="@{/purchases}">
+                <i class="fas fa-arrow-alt-circle-left"></i> Volver
+            </a></h4>
+        </div>
+        <div class="card-body">
+            <div class="row text-success">
+                <div class="col-md-8 customer-info">
+                    <div>
+                        <h5 th:text="'Datos del cliente'"></h5>
+                        <div>
+                            <strong>Nombre:</strong>
+                            <span th:text="${user.username}"></span>
+                        </div>
+                        <div>
+                            <strong>Apellido:</strong>
+                            <span th:text="${user.firstname}"></span>
+                        </div>
+                        <div>
+                            <strong>Email:</strong>
+                            <span th:text="${user.email}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 invoice-info">
+                    <div>
+                        <h5 th:text="'Datos de la factura'"></h5>
+                        <div>
+                            <strong>Nº Factura:</strong>
+                            <span th:text="${purchase.id}"></span>
+                        </div>
+                        <div>
+                            <strong>Descripción: Factura de compra</strong>
+                        </div>
+                        <div>
+                            <strong>Fecha:</strong>
+                            <span th:text="${#temporals.format(purchase.date, 'dd/MM/yyyy')}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="total-container">
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th class="col text-success">Producto</th>
+                        <th class="col text-success">Nombre</th>
+                        <th class="col text-success">Cantidad</th>
+                        <th class="col text-success">Precio Unitario</th>
+                        <th class="col text-success">Importe</th>
+                        <th class="col text-success">Valoración</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item, iter : ${purchase.items}">
+                        <td class="col-12 col-md-2"><img class="img-fluid" th:src="${item.shoe.imagePrimary}" alt="Product Image"></td>
+                        <td th:text="${item.shoe.name}"></td>
+                        <td th:text="${item.quantity}"></td>
+                        <td th:text="${item.shoe.price} + '€'"></td>
+                        <td th:text="${item.totalPrice} + '€'"></td>
+                        <td>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" th:data-bs-target="'#ratingModal-' + ${iter.index}"  th:disabled="${item.hasRated}">Valorar</button>
+                            <div class="modal" th:id="'ratingModal-' + ${iter.index}" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ratingModalLabel">Valorar Producto</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="productName" class="mb-3"></div>
+                                            <h5 class="mb-3"><span th:text="${item.shoe.name}"></span></h5>
+                                            <img th:src="${item.shoe.imagePrimary}">
+                                            <div class="rating py-4">
+                                                <i class="fas fa-star star" th:data-modal-index="${iter.index}" data-rating="5"></i>
+                                                <i class="fas fa-star star" th:data-modal-index="${iter.index}" data-rating="4"></i>
+                                                <i class="fas fa-star star" th:data-modal-index="${iter.index}" data-rating="3"></i>
+                                                <i class="fas fa-star star" th:data-modal-index="${iter.index}" data-rating="2"></i>
+                                                <i class="fas fa-star star" th:data-modal-index="${iter.index}" data-rating="1"></i>
+                                            </div>
+                                            <input type="hidden" th:id="'ratingValue-' + ${iter.index}" value="0">
+                                            <!-- Agregar campo de comentario -->
+                                            <div class="form-group">
+                                                <label >Comentario:</label>
+                                                <textarea class="form-control" th:id="'comment-' + ${iter.index}" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success" th:onclick="'sendRating(' + ${item.shoe.id} + ', ' + ${iter.index} + ')'">Enviar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <div class="total-amount">
+                    <h2 class="text-success">Total: <span th:text="${purchase.totalPurchase}+'€'"></span></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal para la valoración -->
+<footer th:replace="~{layout/layout :: footer}">
+</footer>
+<script th:src="@{/assets/js/jquery-1.11.0.min.js}"></script>
+<script th:src="@{/assets/js/jquery-migrate-1.2.1.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/templatemo.js}"></script>
+<script th:src="@{/assets/js/custom.js}"></script>
+<script th:src="@{/assets/js/slick.min.js}"></script>
+<script th:src="@{/assets/js/cartService.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+     const stars = document.querySelectorAll('.rating .star');
+
+     stars.forEach(star => {
+         star.addEventListener('click', function () {
+             const rating = this.getAttribute('data-rating');
+             const modalIndex = this.getAttribute('data-modal-index');
+             document.querySelector(`#ratingValue-${modalIndex}`).value = rating;
+             updateStars(rating, modalIndex);
+         });
+     });
+
+     function updateStars(rating, modalIndex) {
+         const stars = document.querySelectorAll(`#ratingModal-${modalIndex} .star`);
+         stars.forEach(star => {
+             if (star.getAttribute('data-rating') <= rating) {
+                 star.classList.add('selected');
+             } else {
+                 star.classList.remove('selected');
+             }
+         });
+     }
+ });
+     function sendRating(shoeId, index) {
+           const ratingValue = document.querySelector(`#ratingValue-${index}`).value;
+     const comment = document.querySelector(`#comment-${index}`).value;
+         console.log(ratingValue)
+         console.log(comment)
+
+          // Aquí puedes realizar una llamada AJAX para enviar la valoración y el comentario al servidor
+     fetch('/rate-product', {
+         method: 'POST',
+         headers: {
+             'Content-Type': 'application/json'
+         },
+         body: JSON.stringify({
+             shoeId: shoeId,
+             ratingValue: ratingValue,
+             comment: comment
+         })
+     })
+     .then(response => response.json())
+     .then(data => {
+         if (data.success) {
+             // Cerrar el modal
+             $(`#ratingModal-${index}`).modal('hide');
+
+             // Mostrar la alerta estilizada
+             Swal.fire({
+                 icon: 'success',
+                 title: 'Gracias por valorar el producto',
+                 text: 'Tu valoración ha sido enviada correctamente.',
+                 showConfirmButton: false,
+                 timer: 2000 }).then(() => {
+            // Recargar la página después de 2 segundos
+            setTimeout(() => {
+                location.reload();
+            }, 200);
+        });
+         } else {
+             Swal.fire({
+                 icon: 'error',
+                 title: 'Error',
+                 text: 'Hubo un problema al enviar la valoración.',
+                 showConfirmButton: false,
+                 timer: 2000
+             });
+         }
+     })
+     .catch(error => {
+         console.error('Error:', error);
+         Swal.fire({
+             icon: 'error',
+             title: 'Error',
+             text: 'Hubo un problema al enviar la valoración.',
+             showConfirmButton: false,
+             timer: 2000
+         });
+     });
+     }
+</script>
+</body>
+</html>
