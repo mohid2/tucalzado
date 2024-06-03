@@ -29,7 +29,7 @@ public class PurchaseController {
         this.ratingService = ratingService;
     }
 
-    @GetMapping("/cart")
+    @GetMapping("/carrito")
     public String getCart(Model model) {
         model.addAttribute("purchase", new Purchase());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

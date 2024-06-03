@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout/layout :: head}">
+</head>
+<link rel="stylesheet" th:href="@{/assets/css/cart.css}">
+<body>
+<header th:replace="~{layout/layout :: header}">
+</header>
+<div class="container-fluid bg-light py-3">
+    <div class="row">
+        <div class="col-md-6 m-auto text-center">
+            <div class="row p-2 pb-3">
+                <h1 class="h1 text-success"><strong >Carro de la compra</strong></h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contenedor del contenido que limita el ancho -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-8 cart">
+            <!-- La tabla de elementos del carrito se mostrará aquí -->
+            <table id="cartTable" class="table table-responsive">
+                <thead>
+                <tr>
+                    <th class="col text-success">Producto</th>
+                    <th class="col text-success">Nombre</th>
+                    <th class="col text-success">Cantidad</th>
+                    <th class="col text-success">Precio unitario</th>
+                    <th class="col text-success">Total</th>
+                    <th class="col text-success">Acción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Los elementos del carrito se insertarán aquí mediante JavaScript -->
+                </tbody>
+            </table>
+            <div class="col d-grid ">
+                <a class="btn btn-success btn-sm me-2" th:onclick="goBack()" >
+                    <i class="fas fa-arrow-alt-circle-left ">Volver a la tienda</i>
+                </a>
+            </div>
+        </div>
+        <!-- Inicio del resumen -->
+        <div class="col-md-12 col-lg-4 summary">
+            <div><h5><b>Summary</b></h5></div>
+            <hr>
+            <form>
+                <p>ENVÍO</p>
+                <select id="shippingOption">
+                    <option value="0.00" class="text-muted">Entrega estándar - 0.00&euro;</option>
+                    <option value="15.00" class="text-muted">Entrega urgente - 15.00&euro;</option>
+                </select>
+                <p>DAR CÓDIGO</p>
+                <input id="code" placeholder="Enter your code">
+            </form>
+            <!-- Información de la dirección de envío -->
+            <div th:if="${user.address != null}">
+                <h5><b>Dirección de Envío</b></h5>
+                <p th:text="${user.address.street} + ' ' + ${user.address.number} + ' ' + ${user.address.floor} + ' ' + ${user.address.door}"></p>
+                <p>
+                    <span th:text="${user.address.city}"></span>,
+                    <span th:text="${user.address.province}"></span>
+                    <span th:text="${user.address.zipCode}"></span>
+                </p>
+            </div>
+            <div th:if="${user.address == null}">
+                <p>No se ha proporcionado una dirección de envío.</p>
+            </div>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="col"><h4>PRECIO TOTAL</h4></div>
+                <!-- El precio total se actualizará dinámicamente con JavaScript -->
+                <div class="col text-right"><h4 id="totalPrice"></h4></div>
+            </div>
+            <form action="#" class="credit-card-div ">
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        <!-- Resto del formulario de resumen -->
+                    </div>
+                </div>
+            </form>
+            <button class="btn btn-success btn-block"  th:onclick="sendCartDataToBackend([[${user.address}]])"> PAGAR </button>
+        </div>
+        <!-- Fin del resumen -->
+    </div>
+</div>
+<!-- Fin del contenedor -->
+<!-- Start Footer -->
+<footer th:replace="~{layout/layout :: footer}">
+</footer>
+<!-- End Footer -->
+
+<!-- Start Script -->
+<script th:src="@{/assets/js/jquery-1.11.0.min.js}"></script>
+<script th:src="@{/assets/js/jquery-migrate-1.2.1.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/templatemo.js}"></script>
+<script th:src="@{/assets/js/custom.js}"></script>
+<!-- Asegúrate de incluir cartService.js antes de este script -->
+<script src="/assets/js/cartService.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    // Función para calcular y actualizar el precio total incluyendo el costo de envío
+    function updateTotalPrice() {
+        // Obtener el costo de envío seleccionado por el usuario
+        const shippingOption = document.getElementById('shippingOption');
+        const shippingCost = parseFloat(shippingOption.value);
+
+        // Obtener el precio total de los productos en el carrito
+        const totalCartPrice = calculateTotalCart();
+
+        // Calcular el nuevo precio total sumando el costo de envío al precio total de los productos en el carrito
+        const newTotalPrice = totalCartPrice + shippingCost;
+
+        // Actualizar el precio total en la interfaz de usuario
+        document.getElementById('totalPrice').textContent = newTotalPrice.toFixed(2);
+    }
+
+    // Agregar un evento de cambio al elemento select para actualizar el precio total cuando se seleccione una opción de envío
+    document.getElementById('shippingOption').addEventListener('change', updateTotalPrice);
+
+    // Función para calcular el precio total de los productos en el carrito
+    function calculateTotalCart() {
+        // Recuperar el carrito del localStorage
+        const storedCart = JSON.parse(localStorage.getItem('cart'));
+        let total = 0;
+
+        // Verificar si hay un carrito almacenado
+        if (storedCart && storedCart.carItems) {
+            // Iterar sobre los elementos del carrito
+            for (const item of storedCart.carItems) {
+                // Multiplicar el precio por la cantidad y sumar al total
+                total += item.price * item.quantity;
+            }
+        }
+
+        // Retornar el total del carrito
+        return total;
+    }
+
+    // Llamada inicial para calcular el precio total
+    updateTotalPrice();
+</script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+</body>
+</html>
