@@ -2,8 +2,8 @@ package com.tucalzado.service;
 
 
 
-import com.tucalzado.entity.user.Address;
-import com.tucalzado.entity.user.User;
+import com.tucalzado.entity.Address;
+import com.tucalzado.entity.User;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package com.tucalzado.entity.user;
+package com.tucalzado.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,9 +11,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder

@@ -1,4 +1,4 @@
-package com.tucalzado.entity.user;
+package com.tucalzado.entity.enums;
 
 public enum RoleEnum {
     ADMIN, USER

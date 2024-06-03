@@ -1,6 +1,6 @@
-package com.tucalzado.entity.user;
+package com.tucalzado.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tucalzado.entity.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

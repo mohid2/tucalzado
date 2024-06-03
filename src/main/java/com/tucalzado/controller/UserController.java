@@ -1,8 +1,8 @@
 package com.tucalzado.controller;
 
 
-import com.tucalzado.entity.user.Address;
-import com.tucalzado.entity.user.User;
+import com.tucalzado.entity.Address;
+import com.tucalzado.entity.User;
 import com.tucalzado.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;

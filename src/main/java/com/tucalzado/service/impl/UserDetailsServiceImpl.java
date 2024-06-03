@@ -2,9 +2,7 @@ package com.tucalzado.service.impl;
 
 
 
-import com.tucalzado.entity.user.Role;
 import com.tucalzado.repository.IUserRepository;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-         com.tucalzado.entity.user.User user = userRepository.findByUsername(username).orElseThrow();
+         com.tucalzado.entity.User user = userRepository.findByUsername(username).orElseThrow();
 
         List<SimpleGrantedAuthority> grantedAuthorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole().name())).toList();

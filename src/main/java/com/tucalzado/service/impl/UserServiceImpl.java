@@ -2,10 +2,10 @@ package com.tucalzado.service.impl;
 
 
 
-import com.tucalzado.entity.user.Address;
-import com.tucalzado.entity.user.Role;
-import com.tucalzado.entity.user.RoleEnum;
-import com.tucalzado.entity.user.User;
+import com.tucalzado.entity.Address;
+import com.tucalzado.entity.Role;
+import com.tucalzado.entity.enums.RoleEnum;
+import com.tucalzado.entity.User;
 import com.tucalzado.repository.IAddressRepository;
 import com.tucalzado.repository.IRoleRepository;
 import com.tucalzado.repository.IUserRepository;
@@ -13,7 +13,6 @@ import com.tucalzado.service.IUserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 

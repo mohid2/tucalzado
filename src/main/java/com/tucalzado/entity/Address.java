@@ -1,4 +1,4 @@
-package com.tucalzado.entity.user;
+package com.tucalzado.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
