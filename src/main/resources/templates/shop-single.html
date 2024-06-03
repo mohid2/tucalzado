@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}">
+</head>
+<link rel="stylesheet" type="text/css" th:href="@{/assets/css/slick.min.css}">
+<link rel="stylesheet" type="text/css"  th:href="@{/assets/css/slick-theme.css}">
+<style>
+    .price-highlight {
+          color: #3CB430; /* Rojo brillante */
+          font-weight: bold;
+          text-shadow: 1px 1px 2px #000000; /* Sombra para hacer el texto más visible */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%; /* Asegura que el contenedor use toda la altura disponible */
+      }
+      .description-container {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+      }
+  #price-container .price-highlight p {
+        font-size: 50px !important;
+        font-weight: bold; /* Añadir grosor a la fuente */
+        text-align: center; /* Centrar el texto */
+}
+</style>
+<body>
+<header th:replace="~{layout/layout :: header}">
+</header>
+<section class="bg-light" >
+    <div class="container pb-5">
+        <div class="row">
+            <div class="col-lg-5 mt-5">
+                <div class="card mb-3">
+                    <img class="card-img img-fluid" th:src="${shoe.getImagePrimary}" alt="Card image cap" id="product-detail">
+                </div>
+                <div class="row">
+                    <!--Start Controls-->
+                    <div class="col-1 align-self-center">
+                        <a href="#multi-item-example" role="button" data-bs-slide="prev">
+                            <i class="text-dark fas fa-chevron-left"></i>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </div>
+                    <!--End Controls-->
+                    <!--Start Carousel Wrapper-->
+                    <div id="multi-item-example" class="col-10 carousel slide carousel-multi-item" data-bs-ride="carousel">
+                        <!--Start Slides-->
+                        <div class="carousel-inner product-links-wap" role="listbox">
+                            <!--First slide-->
+                            <div class="carousel-item active item ">
+                                <div class="row">
+                                    <!--Check if product has images and display up to 3-->
+                                    <div th:each="image, index : ${shoe.imageUrl}" th:if="${index.index < 3}" class="col-4">
+                                        <a href="#">
+                                            <img class="card-img img-fluid" th:src="${image.getUrl()}" alt="'Product Image ' + ${index.index + 1}">
+                                        </a>
+                                    </div>
+                                    <!--If less than 3 images, complete with empty columns-->
+                                    <div th:if="${#lists.size(shoe.imageUrl) < 3}" th:each="emptyColumn : ${#numbers.sequence(#lists.size(shoe.imageUrl), 2)}" class="col-4"></div>
+                                </div>
+                            </div>
+                            <!--/.First slide-->
+                            <!--Second slide-->
+                            <div class="carousel-item item ">
+                                <div class="row">
+                                    <!--Check if product has images and display up to 6-->
+                                    <div th:each="image, index : ${shoe.imageUrl}" th:if="${index.index >= 3 and index.index < 6}" class="col-4">
+                                        <a href="#">
+                                            <img class="card-img img-fluid" th:src="${image.getUrl()}" alt="'Product Image ' + ${index.index + 1}">
+                                        </a>
+                                    </div>
+                                    <!--If less than 6 images, complete with empty columns-->
+                                    <div th:if="${#lists.size(shoe.imageUrl) < 6}" th:each="emptyColumn : ${#numbers.sequence(#lists.size(shoe.imageUrl), 5)}" class="col-4"></div>
+                                </div>
+                            </div>
+                            <!--/.Second slide-->
+                        </div>
+                        <!--End Slides-->
+                    </div>
+
+                    <!--End Carousel Wrapper-->
+                    <!--Start Controls-->
+                    <div class="col-1 align-self-center">
+                        <a href="#multi-item-example" role="button" data-bs-slide="next">
+                            <i class="text-dark fas fa-chevron-right"></i>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                    <!--End Controls-->
+                </div>
+            </div>
+        <!-- col end -->
+            <div  class="col-lg-7 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="h2" th:text="${shoe.name}">Active Wear</h1>
+                        <div class="row">
+                            <div class="col-8 description-container">
+                                <h6>Descripción:</h6>
+                                <ul>
+                                    <li th:each="descLine : ${descriptionLines}" th:text="${descLine}"></li>
+                                </ul>
+                            </div>
+                            <div class="col-4">
+                                <div class="card-body" id="price-container">
+                                    <div class="price-highlight">
+                                        <p th:text="${shoe.price + ' €'}"></p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <h6>Color : <span th:text="${shoe.color}"></span></h6>
+                            </li>
+                        </ul>
+                        <form action="" method="GET">
+                            <input type="hidden" name="shoe-title" value="Activewear">
+                            <!-- Otros elementos del formulario -->
+                            <div class="row">
+                                <div class="col-auto">
+                                    <h6 class="list-inline-item">Talla</h6>
+                                    <input type="hidden" name="shoe-title" value="Activewear">
+                                    <input type="hidden" name="shoe-size" id="shoe-size">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <ul class="w-100 list-unstyled d-flex flex-wrap justify-content-start mb-0 shoe-sizes">
+                                        <h6 class="text-danger" th:if="${#lists.size(shoe.shoeStocks) == 0}">No hay tallas disponibles en este momento </h6>
+                                        <!-- Iterar sobre las tallas de zapatos -->
+                                        <th:block th:each="stock : ${shoe.shoeStocks}">
+                                            <li class="list-inline-item">
+                                                <span th:text="${stock.size.shoeSize.size}" class="btn btn-success btn-size" th:onclick="selectSize([[${stock.size.shoeSize.size}]])"></span>
+                                            </li>
+                                        </th:block>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-truck fa-lg text-success me-2"></i>
+                                    <span>Envío estándar gratis, tarda 15 días</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-store fa-lg text-success me-2"></i>
+                                    <span>Envío y devolución gratuitos</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-undo fa-lg text-success me-2"></i>
+                                    <span>Derecho de devolución de 100 días</span>
+                                </div>
+                            <!-- Otros elementos del formulario -->
+                            <div class="row pb-3 mt-3">
+                                <div class="col d-grid">
+                                    <button class="btn btn-success btn-lg"  th:onclick="addToCart([[${shoe}]],getSelectedSize())" th:disabled="${#lists.size(shoe.shoeStocks) == 0}">
+                                        <i class="fas fa-cart-plus"></i> Añadir a la cesta
+                                    </button>
+                                </div>
+                                <div class="col d-grid">
+                                    <a class="btn btn-success btn-lg" th:onclick="addFavoriteProduct([[${shoe}]])" >
+                                        <i class="far fa-heart"></i> Añadir a favoritos
+                                    </a>
+                                </div>
+                                <div class="col d-grid">
+                                    <a class="btn btn-success btn-lg" th:onclick="goBack()" >
+                                        <i class="fas fa-arrow-alt-circle-left"></i> Volver a la tienda
+                                    </a>
+                                </div>
+                            </div>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Start Article -->
+<section id="related-products-section" class="py-5">
+    <div class="container  py-5">
+        <div class="row text-center py-3">
+        <div class="row  p-2 pb-3">
+            <h1 class="h1 text-success" ><strong>Productos relacionados</strong></h1>
+        </div>
+        </div>
+        <!--Start Carousel Wrapper-->
+        <div id="carousel-related-product" th:data-products="${shoes}">
+            <div class="p-2 pb-3" th:each="shoe : ${shoes}">
+                <div class="product-wap card rounded-0">
+                    <div class="card rounded-0">
+                        <img class="card-img" th:src="${shoe.getImagePrimary}" alt="Imagen del producto">
+                        <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                            <ul class="list-unstyled">
+                                <li><a class="btn btn-success text-white" href="#" th:onclick="addFavoriteProduct([[${shoe}]])"><i class="far fa-heart"></i></a></li>
+                                <li><a class="btn btn-success text-white mt-2" th:href="@{/producto/{id}(id=${shoe.id})}"><i class="far fa-eye"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <a th:href="@{/producto/{id}(id=${shoe.id})}" class="h3 text-decoration-none" th:text="${shoe.name}"></a>
+                        <ul class="list-unstyled d-flex justify-content-center mb-1">
+                            <li>
+                                <i class="fa fa-star" th:classappend="${shoe.rating >= 1} ? 'text-warning' : 'text-secondary'"></i>
+                                <i class="fa fa-star" th:classappend="${shoe.rating >= 2} ? 'text-warning' : 'text-secondary'"></i>
+                                <i class="fa fa-star" th:classappend="${shoe.rating >= 3} ? 'text-warning' : 'text-secondary'"></i>
+                                <i class="fa fa-star" th:classappend="${shoe.rating >= 4} ? 'text-warning' : 'text-secondary'"></i>
+                                <i class="fa fa-star" th:classappend="${shoe.rating >= 5} ? 'text-warning' : 'text-secondary'"></i>
+                            </li>
+                        </ul>
+                        <p class="text-center mb-0" th:text="${shoe.price}">$20.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="valoracion-section" class="py-5">
+    <div class="container py-5">
+        <div class="row text-center py-3">
+            <h1 class="h1 text-success"><strong>Valoración y Comentarios</strong></h1>
+        </div>
+        <div class="row">
+            <div th:each="rating : ${shoe.ratings}" class="col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Mostrar la fecha de la valoración -->
+                        <p class="card-text"><strong>Fecha:</strong> <span  th:text="${#temporals.format(rating.createdAt, 'dd/MM/yyyy')}" ></span></p>
+                        <!-- Mostrar el nombre de usuario -->
+                        <p class="card-text"><strong>Usuario:</strong> <span th:text="${rating.user.username}"></span></p>
+                        <!-- Mostrar la valoración -->
+                        <ul class="list-unstyled d-flex justify-content-center mb-1">
+                            <li>
+                                <i class="fa fa-star" th:classappend="${rating.ratingValue >= 1} ? 'text-warning' : 'text-secondary'"></i>
+                                <i class="fa fa-star" th:classappend="${rating.ratingValue >= 2} ? 'text-warning' : 'text-secondary'"></i>
+                                <i class="fa fa-star" th:classappend="${rating.ratingValue >= 3} ? 'text-warning' : 'text-secondary'"></i>
+                                <i class="fa fa-star" th:classappend="${rating.ratingValue >= 4} ? 'text-warning' : 'text-secondary'"></i>
+                                <i class="fa fa-star" th:classappend="${rating.ratingValue >= 5} ? 'text-warning' : 'text-secondary'"></i>
+                            </li>
+                        </ul>
+                        <!-- Mostrar el comentario -->
+                        <p class="card-text"><strong>Comentario:</strong> <span th:text="${rating.comment}"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Article -->
+<!-- Start Footer -->
+<footer th:replace="~{layout/layout :: footer}">
+</footer>
+<!-- End Footer -->
+<!-- Start Script -->
+<script th:src="@{/assets/js/jquery-1.11.0.min.js}"></script>
+<script th:src="@{/assets/js/jquery-migrate-1.2.1.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/templatemo.js}"></script>
+<script th:src="@{/assets/js/custom.js}"></script>
+<script th:src="@{/assets/js/cartService.js}"></script>
+<script th:src="@{/assets/js/slick.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script th:src="@{/assets/js/products-favorite.js}"></script>
+<script th:inline="javascript">
+    $(document).ready(function() {
+        $('#carousel-related-product').slick({
+            infinite: true,
+            arrows: false,
+            slidesToShow: 4,
+            slidesToScroll: 4,
+            dots: true,
+            responsive: [{
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 4
+                    }
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 4
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 4
+                    }
+                }
+            ]
+        });
+    });
+</script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+
+    function selectSize(size) {
+    document.getElementById('shoe-size').value = size; // Establece el valor de la talla seleccionada en el input hidden
+}
+
+function getSelectedSize() {
+    return document.getElementById('shoe-size').value; // Obtiene la talla seleccionada
+}
+</script>
+</body>
+</html>
