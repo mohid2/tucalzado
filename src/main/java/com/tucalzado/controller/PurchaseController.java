@@ -3,6 +3,7 @@ package com.tucalzado.controller;
 import com.tucalzado.entity.Purchase;
 import com.tucalzado.entity.User;
 import com.tucalzado.service.IPurchaseService;
+import com.tucalzado.service.IRatingService;
 import com.tucalzado.service.IUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -40,7 +41,7 @@ public class PurchaseController {
         }
         return "cart";
     }
-    @GetMapping("/purchases")
+    @GetMapping("/mis-compras")
     public String getPurchase(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
@@ -52,7 +53,7 @@ public class PurchaseController {
         }
         return "purchases";
     }
-    @PostMapping("/purchase")
+    @PostMapping("/mis-compras")
     public ResponseEntity<?> purchase(@RequestBody Purchase purchase) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
@@ -65,7 +66,7 @@ public class PurchaseController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/purchases/{id}")
+    @GetMapping("/mis-compras/{id}")
     public String getPurchaseByUser(@PathVariable Long id, Model model) {
         Purchase purchase = purchaseService.getPurchaseById(id);
         User user = userService.getUserById(purchase.getUser().getId()).orElseThrow();

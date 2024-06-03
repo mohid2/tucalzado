@@ -284,7 +284,7 @@ function sendCartDataToBackend(address) {
         date: new Date().toISOString()
     };
     // Crear una solicitud HTTP POST
-    fetch('/purchase', {
+    fetch('/mis-compras', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

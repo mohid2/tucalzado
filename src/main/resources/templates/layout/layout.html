@@ -65,7 +65,7 @@
                     <a  id="add-product-icon" class="nav-icon d-inline " sec:authorize="hasAuthority('ADMIN')" data-bs-toggle="modal" th:href="@{/agregar/calzado}" >
                         <i class="fas fa-plus-circle text-success mr-2"></i>
                     </a>
-                    <a id="cart-icon" class="nav-icon position-relative text-decoration-none" th:href="@{/cart}">
+                    <a id="cart-icon" class="nav-icon position-relative text-decoration-none" th:href="@{/carrito}">
                         <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                         <span id="cart-count" class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
                     </a>
@@ -83,7 +83,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/perfil}">Perfil</a>
-                            <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/purchases}">Mis compras</a>
+                            <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/mis-compras}">Mis compras</a>
                             <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/cerrar-sesion}">Cerrar sesión</a>
                         </div>
                     </div>
