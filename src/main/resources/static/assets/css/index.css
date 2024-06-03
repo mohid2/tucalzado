@@ -1,0 +1,28 @@
+.card-img {
+    width: 450px;
+    height: 450px;
+    object-fit: contain; /* Ajusta la imagen dentro del contenedor sin distorsionarla */
+    object-position: center; /* Centra la imagen horizontal y verticalmente */
+}
+.exclude-from-css .carousel-item img {
+    /* Estilos específicos para las imágenes del carrusel */
+    width: auto;
+    height: auto;
+    object-fit: cover; /* Ajusta la imagen dentro del contenedor sin distorsionarla */
+    object-position: center; /* Centra la imagen horizontal y verticalmente */
+}
+@media (max-width: 768px) {
+    /* Estilos para dispositivos móviles */
+
+    #related-products-section .card {
+        height: auto; /* Ajusta la altura automáticamente */
+    }
+    #related-products-section .card-body {
+        padding: 10px; /* Ajusta el espacio interno del cuerpo del card */
+    }
+    #related-products-section .card-img {
+        max-height: 200px; /* Establece la altura máxima de la imagen */
+    }
+}
+/* Estilos específicos para las imágenes del carrusel */
+

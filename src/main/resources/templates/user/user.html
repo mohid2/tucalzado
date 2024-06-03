@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout/layout :: head}">
+</head>
+<body>
+<header th:replace="~{layout/layout :: header}">
+</header>
+<!-- Start Content Page -->
+<div class="container-fluid bg-light py-3">
+    <div class="row">
+        <div class="col-md-6 m-auto text-center">
+            <div class="row p-2 pb-3">
+                <h1 class="h1 text-success"><strong >Detalle del usuario</strong></h1>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Start Contact -->
+<div class="container py-5">
+    <div class="row py-5" th:object="${user}">
+        <form class="col-md-9 m-auto" th:action="@{/perfil}" th:object="${user}"  method="post" role="form">
+            <input type="hidden" th:field="*{id}" />
+            <div class="mb-3">
+            <h4 class="h4 text-success text-center">Información del usuario</h4>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="name" class="text-success">Nombre</label>
+                    <input type="text" class="form-control mt-1" th:value="${user.firstname}" th:field="*{firstname}" id="name" name="name" placeholder="Nombre">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="lastname" class="text-success"> Apellidos </label>
+                    <input type="text" class="form-control mt-1" th:value="${user.lastname}" th:field="*{lastname}" id="lastname" name="lastname" placeholder="Apellidos">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="email" class="text-success" >Email</label>
+                    <input type="text" class="form-control mt-1" th:value="${user.email}" th:field="*{email}" id="email" name="email" placeholder="Email">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="username" class="text-success"> Username </label>
+                    <input type="text" class="form-control mt-1" th:value="${user.username}" th:field="*{username}" id="username" name="username" placeholder="Username">
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="mobile"  class="text-success"> Movil </label>
+                        <input type="text" class="form-control mt-1" th:value="${user.mobile}" th:field="*{mobile}" id="mobile" name="mobile" placeholder="+34 123 456 789">
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="fix" class="text-success"> Fijo </label>
+                        <input type="text" class="form-control mt-1" th:value="${user.fix}" th:field="*{fix}" id="fix" name="fix" placeholder="+34 910 45 67 89">
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <h4 class="h4 text-success text-center"> Información de envío </h4>
+            </div>
+            <div th:if="${user.address == null}" class="mb-3">
+                <H3 class="text-center"> No tienes una dirección de envío </H3>
+            </div>
+            <div class="mb-3 text-center">
+                <button type="button"  class="btn btn-outline-success" th:if="${user.address == null}" data-bs-toggle="modal" data-bs-target="#addressModal" onclick="openAddressModal('add')">
+                    Añadir Dirección
+                </button>
+                <button type="button"  class="btn btn-outline-success" th:if="${user.address != null}" data-bs-toggle="modal" data-bs-target="#addressModal" onclick="openAddressModal('edit')">
+                    Editar Dirección
+                </button>
+            </div>
+            <div th:if="${user.address != null}">
+            <div class="row mb-3">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="inputcountry">Pais</label>
+                    <input type="text" class="form-control mt-1"  id="inputcountry"  th:value="${user.address != null ? user.address.country : ''}" readonly >
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="inputcommunity">Comunidad Autónoma</label>
+                    <input type="text" class="form-control mt-1" id="inputcommunity"  th:value="${user.address != null ? user.address.community : ''}" readonly >
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="inputprovince">Provincia</label>
+                    <input type="text" class="form-control mt-1" id="inputprovince"   th:value="${user.address != null ? user.address.province : ''}" readonly >
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="inputcity">Población</label>
+                    <input type="text" class="form-control mt-1" id="inputcity"   th:value="${user.address != null ? user.address.city : ''}" readonly >
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="zip">C.P.</label>
+                    <input type="text" class="form-control"  th:value="${user.address != null ? user.address.zipCode : ''}" id="zip" placeholder="C.P." readonly >
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="calle">Calle</label>
+                    <input type="text" class="form-control" th:value="${user.address != null ? user.address.street : ''}" id="calle" placeholder="Principal " readonly >
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4 mb-3">
+                    <label for="number">Número</label>
+                    <input type="text" class="form-control" id="number"  th:value="${user.address != null ? user.address.number : ''}"  readonly >
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <label for="floor">Piso</label>
+                    <input type="text" class="form-control" id="floor"  th:value="${user.address != null ? user.address.floor : ''}"   readonly >
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <label for="door">Puerta</label>
+                    <input type="text" class="form-control"  id="door"  th:value="${user.address != null ? user.address.door : ''}"readonly >
+                </div>
+            </div>
+            </div>
+            <!-- Modal para editar o añadir dirección -->
+            <div class="row mt-3">
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-outline-success">Guardar</button>
+                    <a class="btn btn-outline-primary" th:href="@{/tienda}">Cancelar</a>
+                </div>
+            </div>
+        </form>
+        <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-success text-center" id="addressModalLabel">Editar/Añadir Dirección</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Formulario para editar o añadir dirección -->
+                        <form id="addressForm" th:action="@{/perfil/direccion}" th:object="${address}" method="post" role="form">
+                            <input type="hidden" id="id" name="userId" th:value="${user.id}"/>
+                            <div th:if="${user.address != null}" >
+                                <input type="hidden" id="addressId"  th:field="*{id}" th:value="${user.address.id}" />
+                            </div>
+                            <div class="mb-3">
+                            </div>
+                            <div class="row mb-3">
+                                <div class="form-group col-md-6 mb-3">
+                                    <label for="country">Pais</label>
+                                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="country" th:onchange="fetchCommunity()"  >
+                                        <option value="" >Seleccione un país</option>
+                                    </select>
+                                    <input type="hidden" id="countryName" th:field="*{country}"  >
+                                </div>
+                                <div class="form-group col-md-6 mb-3">
+                                    <label for="community">Comunidad Autónoma</label>
+                                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="community" th:onchange="fetchProvince()"  >
+                                        <option value="">Seleccione una comunidad</option>
+                                    </select>
+                                    <input type="hidden" id="communityName" th:field="*{community}" >
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="form-group col-md-6 mb-3">
+                                    <label for="province">Provincia</label>
+                                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="province"  th:onchange="fetchCity()" >
+                                        <option value="">Seleccione una provincia</option>
+                                    </select>
+                                    <input type="hidden" id="provinceName" th:field="*{province}">
+                                </div>
+                                <div class="form-group col-md-6 mb-3">
+                                    <label for="city">Población</label>
+                                    <select  class="form-select form-select-sm" aria-label=".form-select-sm example" id="city"   >
+                                        <option value="">Seleccione una Población</option>
+                                    </select>
+                                    <input type="hidden" id="cityName" th:field="*{city}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6 mb-3">
+                                    <label for="inputZip">C.P.</label>
+                                    <input type="text" class="form-control" th:field="*{zipCode}"  id="inputZip" placeholder="C.P.">
+                                </div>
+                                <div class="form-group col-md-6 mb-3">
+                                    <label for="inputStreet">Calle</label>
+                                    <input type="text" class="form-control" th:field="*{street}"  id="inputStreet" placeholder="Principal ">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-4 mb-3">
+                                    <label for="inputNumber">Número</label>
+                                    <input type="text" class="form-control" th:field="*{number}"  id="inputNumber" placeholder="123">
+                                </div>
+                                <div class="form-group col-md-4 mb-3">
+                                    <label for="inputFloor">Piso</label>
+                                    <input type="text" class="form-control" th:field="*{floor}"  id="inputFloor" placeholder="4">
+                                </div>
+                                <div class="form-group col-md-4 mb-3">
+                                    <label for="inputDoor">Puerta</label>
+                                    <input type="text" class="form-control" th:field="*{door}"  id="inputDoor" placeholder="A">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openAddressModal(action) {
+        const modalTitle = document.getElementById('addressModalLabel');
+        if (action === 'edit') {
+            modalTitle.textContent = 'Editar Dirección';
+        } else if (action === 'add') {
+            modalTitle.textContent = 'Añadir Dirección';
+        }
+    }
+</script>
+<footer th:replace="~{layout/layout :: footer}"></footer>
+<script src="assets/js/jquery-1.11.0.min.js"></script>
+<script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/templatemo.js"></script>
+<script src="assets/js/custom.js"></script>
+<script src="/assets/js/cartService.js"></script>
+<script src="/assets/js/geonames.js"></script>
+
+</body>
+</html>

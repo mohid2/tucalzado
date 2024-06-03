@@ -1,0 +1,238 @@
+.card-img {
+    width: 450px;
+    height: 450px;
+    object-fit: contain; /* Ajusta la imagen dentro del contenedor sin distorsionarla */
+    object-position: center; /* Centra la imagen horizontal y verticalmente */
+}
+.item img {
+    width: 100px; /* Ancho de la plantilla */
+    height: 100px; /* Altura de la plantilla */
+    background-color: white; /* Color de fondo blanco */
+    object-fit: contain; /* Ajusta la imagen dentro del contenedor sin distorsionarla */
+    object-position: center; /* Centra la imagen horizontal y verticalmente */
+}
+#product-detail {
+    width: 600px;
+    height: 500px;
+    object-fit: contain; /* Ajusta la imagen dentro del contenedor sin distorsionarla */
+    object-position: center; /* Centra la imagen horizontal y verticalmente */
+}
+
+
+/* Estilos para la tabla */
+#cartTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+/* Estilos para las celdas de la tabla */
+#cartTable td, #cartTable th {
+    padding: 10px;
+    text-align: center;
+}
+
+/* Estilos para las filas impares */
+#cartTable tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+#cartTable td, #cartTable th {
+    text-align: center;
+    vertical-align: middle; /* Alinear verticalmente el contenido */
+}
+
+/* Estilos específicos para las columnas Name, Quantity, Price (Unit), Total y Actions */
+#cartTable th:nth-child(2),
+#cartTable td:nth-child(2),
+#cartTable th:nth-child(3),
+#cartTable td:nth-child(3),
+#cartTable th:nth-child(4),
+#cartTable td:nth-child(4),
+#cartTable th:nth-child(5),
+#cartTable td:nth-child(5),
+#cartTable th:nth-child(6),
+#cartTable td:nth-child(6) {
+    text-align: center;
+}
+
+.back-to-shop a {
+    text-decoration: none; /* Eliminar subrayado del enlace */
+}
+@media (max-width: 768px) {
+    /* Estilos para dispositivos móviles */
+
+    #related-products-section .card {
+        height: auto; /* Ajusta la altura automáticamente */
+    }
+    #related-products-section .card-body {
+        padding: 10px; /* Ajusta el espacio interno del cuerpo del card */
+    }
+    #related-products-section .card-img {
+        max-height: 200px; /* Establece la altura máxima de la imagen */
+    }
+}
+/* Estilos específicos para las imágenes del carrusel */
+.exclude-from-css .carousel-item img {
+    /* Estilos específicos para las imágenes del carrusel */
+    width: auto;
+    height: auto;
+    object-fit: cover; /* Ajusta la imagen dentro del contenedor sin distorsionarla */
+    object-position: center; /* Centra la imagen horizontal y verticalmente */
+}
+.search-form .form-group {
+  float: right !important;
+  transition: all 0.35s, border-radius 0s;
+  width: 32px;
+  height: 32px;
+  background-color: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+}
+.search-form .form-group input.form-control {
+  padding-right: 20px;
+  border: 0 none;
+  background: transparent;
+  box-shadow: none;
+  display:block;
+}
+.search-form .form-group input.form-control::-webkit-input-placeholder {
+  display: none;
+}
+.search-form .form-group input.form-control:-moz-placeholder {
+  /* Firefox 18- */
+  display: none;
+}
+.search-form .form-group input.form-control::-moz-placeholder {
+  /* Firefox 19+ */
+  display: none;
+}
+.search-form .form-group input.form-control:-ms-input-placeholder {
+  display: none;
+}
+.search-form .form-group:hover,
+.search-form .form-group.hover {
+  width: 100%;
+  border-radius: 4px 25px 25px 4px;
+}
+.search-form .form-group span.form-control-feedback {
+  position: absolute;
+  top: -1px;
+  right: -2px;
+  z-index: 2;
+  display: block;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  color: #3596e0;
+  left: initial;
+  font-size: 14px;
+}
+
+    /* Estilos para dispositivos móviles */
+    #cartTable th:nth-child(2),
+    #cartTable td:nth-child(2) {
+        display: none; /* Ocultar la columna del nombre */
+    }
+
+    #cartTable {
+        font-size: 14px; /* Reducir el tamaño de la fuente de la tabla */
+    }
+
+    #cartTable img {
+        max-width: 50px; /* Reducir el tamaño máximo de la imagen */
+        height: auto; /* Mantener la proporción de la imagen */
+    }
+
+    #cartTable tbody td {
+        padding: 8px; /* Añadir relleno a las celdas de la tabla */
+    }
+}
+#cartTable img {
+     width: 60px;
+        height: 60px;
+        object-fit: contain; /* Ajusta la imagen dentro del contenedor sin distorsionarla */
+        object-position: center; /* Centra la imagen horizontal y verticalmente */
+}
+@media (max-width: 768px) {
+    .row > [class*="fila"] {
+         flex: 0 0 50%; /* Cambia el ancho de las columnas */
+         max-width: 50%; /* Cambia el máximo ancho de las columnas */
+    }
+}
+
+@media (max-width: 768px) {
+    /* Estilos para dispositivos móviles */
+
+    #productos-container .col-md-4 {
+        flex: 0 0 50%; /* Divide el ancho en dos columnas */
+        max-width: 50%; /* Limita el ancho al 50% del contenedor */
+    }
+
+    #productos-container .card {
+        height: auto; /* Ajusta la altura automáticamente */
+    }
+
+    #productos-container .card-body {
+        padding: 10px; /* Ajusta el espacio interno del cuerpo del card */
+    }
+
+    #productos-container .card-img {
+        max-height: 200px; /* Establece la altura máxima de la imagen */
+    }
+}
+.product-wap .card-body {
+    max-width: 100%; /* Limita el ancho máximo del cuerpo del card */
+    overflow: hidden; /* Oculta el contenido que se desborda */
+    white-space: nowrap; /* Evita el salto de línea */
+    text-overflow: ellipsis; /* Agrega puntos suspensivos (...) cuando el texto se desborda */
+}
+
+.product-wap .card-body a {
+    display: inline-block; /* Permite que los enlaces se muestren en una línea */
+    max-width: 100%; /* Limita el ancho máximo del enlace */
+    overflow: hidden; /* Oculta el contenido que se desborda */
+    white-space: nowrap; /* Evita el salto de línea */
+    text-overflow: ellipsis; /* Agrega puntos suspensivos (...) cuando el texto se desborda */
+}
+
+.remove-link {
+    cursor: pointer; /* Cambia el cursor a pointer para indicar que es un enlace */
+    text-decoration: none; /* Elimina cualquier decoración de texto */
+    display: inline-block; /* Hace que el enlace ocupe solo el espacio necesario */
+    outline: none; /* Elimina el contorno al hacer clic */
+}
+
+.remove-link:hover {
+    opacity: 0.7; /* Reduce la opacidad cuando el cursor está sobre el enlace */
+}
+/* Contenedor de la lista de tallas */
+.size-list {
+    display: grid;
+    grid-template-columns: repeat(9, auto); /* 9 columnas automáticas */
+    gap: 2px; /* Espacio entre las tallas */
+    padding: 0;
+    margin: 0;
+    list-style: none; /* Eliminar el estilo de lista predeterminado */
+    min-height: calc(2 * 1.5em + 2px); /* Altura mínima para 2 líneas */
+    max-height: calc(2 * 1.5em + 2px); /* Altura máxima para 2 líneas */
+    overflow: hidden; /* Ocultar cualquier talla adicional */
+}
+
+.size-list li {
+    text-align: center;
+    padding: 2px;
+    white-space: nowrap; /* Prevenir el salto de línea dentro de un ítem */
+}
+
+.shoe-sizes {
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en varias líneas */
+    margin-top: 5px; /* Ajusta el margen superior entre el título y las tallas */
+}
+
+.shoe-sizes li {
+    margin-right: 5px; /* Ajusta el margen derecho entre las tallas de zapatos */
+    margin-bottom: 5px; /* Ajusta el margen inferior entre las líneas de tallas de zapatos */
+}

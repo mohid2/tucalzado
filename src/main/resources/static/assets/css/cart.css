@@ -1,0 +1,118 @@
+.title{
+    margin-bottom: 5vh;
+}
+.card {
+     margin: 5vh auto; /* Ajusta el margen superior e inferior */
+     max-width: 950px;
+     width: 90%;
+     box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+     border-radius: 1rem;
+     border: transparent;
+ }
+
+ @media (max-width: 767px) {
+     .card {
+         margin: 30px auto; /* Ajusta el margen superior e inferior en dispositivos móviles */
+     }
+ }
+
+@media(max-width: 767px) {
+    .cart {
+        padding: 4vh;
+        border-bottom-left-radius: unset;
+        border-top-right-radius: 1rem;
+    }
+}
+
+.summary {
+    background-color: #ddd;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    padding: 4vh;
+    color: #414141;
+}
+
+@media(max-width: 767px) {
+    .summary {
+        border-top-right-radius: unset;
+        border-bottom-left-radius: 1rem;
+    }
+}
+.back-to-shop {
+    margin-top: 90px;
+}
+
+h5 {
+    margin-top: 20px;
+}
+
+hr {
+    margin-top: 20px;
+}
+
+form {
+    padding: 8px 0;
+}
+
+select, input {
+    border: 1px solid rgba(0, 0, 0, 0.137);
+    padding: 12px 10px;
+    margin-bottom: 20px;
+    outline: none;
+    width: 100%;
+    background-color: #f7f7f7;
+}
+
+input:focus::-webkit-input-placeholder {
+    color: transparent;
+}
+
+.btn {
+    background-color: #000;
+    border-color: #000;
+    color: white;
+    width: 100%;
+    font-size: 14px;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 0;
+}
+
+.btn:focus {
+    box-shadow: none;
+    outline: none;
+    box-shadow: none;
+    color: white;
+    -webkit-box-shadow: none;
+    -webkit-user-select: none;
+    transition: none;
+}
+
+.btn:hover {
+    color: white;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+#code {
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253) , rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
+    background-repeat: no-repeat;
+    background-position-x: 95%;
+    background-position-y: center;
+}
+.credit-card-div  span { padding-top:10px; }
+.credit-card-div img { padding-top:30px; }
+.credit-card-div .small-font { font-size:9px; }
+.credit-card-div .pad-adjust { padding-top:10px; }
+
+.custom-input {
+width: 70px; /* Define el ancho deseado */
+font-size: 12px; /* Define el tamaño de la fuente */
+}

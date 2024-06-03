@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head">
+    <title >TuCalzado</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon"  th:href="@{/assets/img/apple-icon.png}">
+    <link rel="shortcut icon" type="image/x-icon"  th:href="@{/assets/img/Tutienda.ico}">
+
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet"  th:href="@{/assets/css/templatemo.css}">
+    <link rel="stylesheet"  th:href="@{/assets/css/custom.css}">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet"  th:href="@{https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap}">
+    <link rel="stylesheet"  th:href="@{/assets/css/fontawesome.min.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <!-- Agrega SweetAlert CSS -->
+    <!-- Importar la fuente Dancing Script -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos personalizados para el título visible -->
+    <style>
+        .custom-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2em; /* Ajusta el tamaño según tus necesidades */
+            color: #4CAF50; /* Cambia el color según tus preferencias */
+            font-weight: 1500; /* Ajusta el grueso de la fuente aquí */
+        }
+    </style>
+</head>
+<body>
+<header th:fragment="header">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a class="navbar-brand text-success logo h1 align-self-center custom-title" th:href="@{/}">
+                TuCalzado
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link"  th:href="@{/}">Página principal</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"  th:href="@{/tienda}">Tienda</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/sobre-nosotros}">Sobre nosotros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/contacto}">Contacto</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar align-self-center d-flex">
+                    <!-- Botón "Añadir producto" -->
+                    <a  id="add-product-icon" class="nav-icon d-inline " sec:authorize="hasAuthority('ADMIN')" data-bs-toggle="modal" th:href="@{/agregar/calzado}" >
+                        <i class="fas fa-plus-circle text-success mr-2"></i>
+                    </a>
+                    <a id="cart-icon" class="nav-icon position-relative text-decoration-none" th:href="@{/cart}">
+                        <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                        <span id="cart-count" class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+                    </a>
+                    <a class="nav-icon position-relative text-decoration-none" th:href="@{/favoritos}">
+                        <i class="fa fa-fw fa-heart text-dark mr-3"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+                    </a>
+                    <a class="nav-icon position-relative text-decoration-none" sec:authorize="!isAuthenticated()" th:href="@{/iniciar-sesion}" >
+                        <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+                    </a>
+                    <div class="nav-item dropdown position-relative text-decoration-none" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/perfil}">Perfil</a>
+                            <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/purchases}">Mis compras</a>
+                            <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/cerrar-sesion}">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>
+    <div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div>
+    <!-- Close Header -->
+</header>
+<footer th:fragment="footer" class="bg-dark" id="tempaltemo_footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-success border-bottom pb-3 border-light logo">Tutienda</h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li>
+                        <i class="fas fa-map-marker-alt fa-fw"></i>
+                        123 Consectetur at ligula 10660
+                    </li>
+                    <li>
+                        <i class="fa fa-phone fa-fw"></i>
+                        <a class="text-decoration-none" href="tel:010-020-0340">010-020-0340</a>
+                    </li>
+                    <li>
+                        <i class="fa fa-envelope fa-fw"></i>
+                        <a class="text-decoration-none" href="mailto:info@company.com">info@company.com</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-light border-bottom pb-3 border-light">Productos</h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li><a class="text-decoration-none" th:href="@{/tienda(type=${'zapatillas'})}">Zapatillas casuales </a></li>
+                    <li><a class="text-decoration-none" th:href="@{/tienda(type=${'zapatillas deportiva'})}">Zapatillas deportiva</a></li>
+                    <li><a class="text-decoration-none" th:href="@{/tienda(gender=${'hombre'}, type=${'zapatos'})}">Zapatos de hombre</a></li>
+                    <li><a class="text-decoration-none" th:href="@{/tienda(gender=${'mujer'}, type=${'zapatos'})}">Zapatos de mujer</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 pt-5">
+                <h2 class="h2 text-light border-bottom pb-3 border-light">Informacion adiciona</h2>
+                <ul class="list-unstyled text-light footer-link-list">
+                    <li><a class="text-decoration-none" th:href="@{/}">Página principal</a></li>
+                    <li><a class="text-decoration-none" th:href="@{/sobre-nosotros}">Sobre nosotros</a></li>
+                    <li><a class="text-decoration-none" th:href="@{/contacto}">Contacto</a></li>
+                    <li><a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Ubicaciones de las tiendas</a></li>
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog  modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title text-dark"> <strong> Ubicación de las tiendas </strong> </h3>
+                                </div>
+                                <div class="modal-body" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+                                    <div id="mapid" style="width: 100%; height: 600px;"></div> <!-- Ajustar la altura del mapa -->
+                                </div>
+                                <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+                                <script>
+                                    var mymap = L.map('mapid').setView([-23.013104, -43.394365, 13], 13);
+
+                                    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+                                        maxZoom: 18,
+                                        attribution: 'Zay Telmplte | Template Design by <a href="https://templatemo.com/">Templatemo</a> | Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                                            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                                            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                                        id: 'mapbox/streets-v11',
+                                        tileSize: 512,
+                                        zoomOffset: -1
+                                    }).addTo(mymap);
+
+                                    L.marker([-23.013104, -43.394365, 13]).addTo(mymap)
+                                        .bindPopup("<b>Zay</b> eCommerce Template<br />Location.").openPopup();
+
+                                    mymap.scrollWheelZoom.disable();
+                                    mymap.touchZoom.disable();
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-100 bg-black py-3">
+        <div class="container">
+            <div class="row pt-2">
+                <div class="col-12">
+                    <p class="text-left text-light">
+                        Copyright &copy; 2021 Company Name
+                        | Designed by <a rel="sponsored" href="https://templatemo.com" target="_blank">TemplateMo</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

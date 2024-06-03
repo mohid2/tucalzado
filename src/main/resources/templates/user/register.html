@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}">
+</head>
+<body>
+<header th:replace="~{layout/layout :: header}"></header>
+<div class="container mt-5 mb-5"> <!-- Añadido mb-5 para margen inferior -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card bg-dark-green text-success"> <!-- Aplicar fondo verde oscuro y texto blanco -->
+                <div class="card-header text-center">
+                    <h4 class="card-title">Registrar Usuario</h4>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/registro}" th:object="${user}" method="post" >
+                        <div class="form-group">
+                            <label for="firstname">Nombre</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white text-dark"><i class="fa fa-user"></i></span>
+                                <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Nombre" th:field="*{firstname}" required >
+                            </div>
+                            <div class="text-danger" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="lastname">Apellido</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white text-dark"><i class="fa fa-user"></i></span>
+                                <input type="text" id="lastname" name="lastname" class="form-control" placeholder="Apellido" th:field="*{lastname}"  required>
+                            </div>
+                            <div class="text-danger" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="telefono">Telefono</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white text-dark"><i class="fa fa-phone"></i></span>
+                                <input type="text" id="telefono" name="email" class="form-control" placeholder="Telefono" th:field="*{mobile}" required>
+                            </div>
+                            <div class="text-danger" th:if="${#fields.hasErrors('mobile')}" th:errors="*{mobile}"></div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="email">Correo Electrónico</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white text-dark"><i class="fa fa-envelope"></i></span>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Correo Electrónico" th:field="*{email}" required>
+                            </div>
+                            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="username">Nombre de Usuario</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white text-dark"><i class="fa fa-user"></i></span>
+                                <input type="text" id="username" name="username" class="form-control" placeholder="Nombre de Usuario" th:field="*{username}" required>
+                            </div>
+                            <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="password">Contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white text-dark"><i class="fa fa-lock"></i></span>
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" th:field="*{password}"  required>
+                            </div>
+                            <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-success btn-block">Registrar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <a th:href="@{/iniciar-sesion}" class="text-success">¿Ya tienes una cuenta? Inicia sesión aquí</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="~{layout/layout :: footer}"></footer>
+<script th:src="@{/assets/js/jquery-1.11.0.min.js}"></script>
+<script th:src="@{/assets/js/jquery-migrate-1.2.1.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/templatemo.js}"></script>
+<script th:src="@{/assets/js/custom.js}"></script>
+<script th:src="@{/assets/js/slick.min.js}"></script>
+<script th:src="@{/assets/js/cartService.js}"></script>
+</body>
+</html>
