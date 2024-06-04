@@ -1,8 +1,8 @@
 package com.tucalzado.service;
 
 
-import com.tucalzado.entity.Shoe;
-import com.tucalzado.entity.User;
+import com.tucalzado.models.entity.Shoe;
+import com.tucalzado.models.entity.User;
 
 public interface IRatingService {
     boolean saveRating(String username, Long shoeId, int ratingValue, String comment);

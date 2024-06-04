@@ -1,7 +1,7 @@
 package com.tucalzado.service.impl;
 
 
-import com.tucalzado.entity.*;
+import com.tucalzado.models.entity.*;
 import com.tucalzado.repository.IItemRepository;
 import com.tucalzado.repository.IPurchaseRepository;
 import com.tucalzado.repository.IShoeStockRepository;

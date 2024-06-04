@@ -1,19 +1,21 @@
 package com.tucalzado.controller;
 
 
-import com.tucalzado.entity.*;
-import com.tucalzado.entity.enums.Gender;
-import com.tucalzado.entity.enums.ShoeTypeEnum;
+import com.tucalzado.models.entity.Shoe;
+import com.tucalzado.models.entity.ShoeStock;
+import com.tucalzado.models.entity.Size;
+import com.tucalzado.models.enums.Gender;
+import com.tucalzado.models.enums.ShoeTypeEnum;
 import com.tucalzado.repository.IShoeSizeRepository;
-import com.tucalzado.repository.IShoeStockRepository;
 import com.tucalzado.service.IShoeService;
-import com.tucalzado.service.IUploadFileService;
 import com.tucalzado.util.paginator.PageRender;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,21 +23,13 @@ import java.io.IOException;
 import java.util.*;
 
 
-
+@AllArgsConstructor
 @Controller
 public class ShoeController {
 
     private final IShoeService iShoeService;
-    private final IUploadFileService iUploadFileService;
     private final IShoeSizeRepository iShoeSizeRepository;
-    private final IShoeStockRepository shoeStockRepository;
 
-    public ShoeController(IShoeService iShoeService, IUploadFileService iUploadFileService, IShoeSizeRepository iShoeSizeRepository, IShoeStockRepository shoeStockRepository) {
-        this.iShoeService = iShoeService;
-        this.iUploadFileService = iUploadFileService;
-        this.iShoeSizeRepository = iShoeSizeRepository;
-        this.shoeStockRepository = shoeStockRepository;
-    }
 
     @GetMapping("/tienda")
     public String getShop(HttpServletRequest request, @RequestParam(name = "page", defaultValue = "0") int page,
@@ -98,66 +92,40 @@ public class ShoeController {
         model.addAttribute("sizes", sizes);
         model.addAttribute("genders", Gender.values());
         model.addAttribute("shoe", new Shoe());
-        return "products/add_shoe_form";
+        return "add_shoe_form";
     }
 
     @PostMapping("/agregar/calzado")
-    public String saveShoe(@Valid @ModelAttribute("shoe") Shoe shoe,
+    public String saveShoe(@Valid @ModelAttribute("shoe") Shoe shoe, BindingResult result,
                            @RequestParam("images") List<MultipartFile> images,
                            @RequestParam Map<String, String> formParams,
                            @RequestParam(name = "imag") MultipartFile imag,
                            Model model) throws IOException {
-// Crear un mapa para almacenar los ID de talla y sus respectivos stocks
-        Map<Long, Integer> sizeStockMap = new HashMap<>();
 
-        // Iterar sobre los parámetros del formulario para obtener los datos del stock
-        for (Map.Entry<String, String> entry : formParams.entrySet()) {
-            String paramName = entry.getKey();
-            String paramValue = entry.getValue();
-            if (paramName.startsWith("stock-")) {
-                Long sizeId = Long.parseLong(paramName.substring("stock-".length()));
-                Integer stock = paramValue.isEmpty() ? 0 : Integer.parseInt(paramValue); // Convertir cadena vacía a 0
-                sizeStockMap.put(sizeId, stock);
+        // Validar imágenes primarias
+        if (imag == null || imag.isEmpty() || !iShoeService.validExtension(imag)) {
+            result.rejectValue("imagePrimary", "error.shoe", "La imagen principal es inválida o no está soportada");
+        }
+        // Validar otras imágenes
+        for (MultipartFile image : images) {
+            if (image == null || image.isEmpty() || !iShoeService.validExtension(image)) {
+                result.rejectValue("imageUrl", "error.shoe", "Una de las imágenes es inválida o no está soportada");
+                break; // Romper el bucle después de encontrar la primera imagen inválida
             }
         }
-
-        // Check if images are uploaded
-        if (imag != null && !imag.isEmpty() || images != null && !images.isEmpty()) {
-            List<ImageUrl> imageUrls = new ArrayList<>();
-            // Process each image
-            for (MultipartFile image : images) {
-                try {
-                    // Save each image to the server
-                    imageUrls.add(iUploadFileService.save(image));
-                } catch (IOException e) {
-                    // Handle exception if image saving fails
-                    e.printStackTrace();
-                    // You can choose to throw an exception or handle it gracefully
-                }
-            }
-            // Set the image URLs in the product
-            shoe.setImagePrimary(iUploadFileService.save(imag).getUrl());
-            shoe.setImageUrl(imageUrls);
+        if (result.hasErrors()) {
+            model.addAttribute("title", "Añadir calzado");
+            model.addAttribute("types", ShoeTypeEnum.values());
+            List<Size> sizes = iShoeSizeRepository.findAll();
+            model.addAttribute("sizes", sizes);
+            model.addAttribute("genders", Gender.values());
+            return "add_shoe_form";
         }
-
-        // Guardar el zapato primero
-        Shoe savedShoe = iShoeService.save(shoe);
-
-        // Imprimir el mapa de tallas y stocks
-        for (Map.Entry<Long, Integer> entry : sizeStockMap.entrySet()) {
-            Long sizeId = entry.getKey();
-            Integer stock = entry.getValue();
-            // Crear una nueva instancia de ShoeStock
-            ShoeStock shoeStock = new ShoeStock();
-            shoeStock.setId(new ShoeStockId(savedShoe.getId(), sizeId));
-            shoeStock.setShoe(savedShoe);
-            shoeStock.setSize(iShoeSizeRepository.findById(sizeId).orElseThrow(() -> new RuntimeException("Size not found")));
-            shoeStock.setStock(stock);
-
-            // Guardar ShoeStock
-            shoeStockRepository.save(shoeStock);
-        }
-        return "redirect:/producto/" + savedShoe.getId();
+       Shoe shoeSaved = iShoeService.save(shoe, images, imag, formParams);
+        return "redirect:/producto/" +shoeSaved.getId();
     }
+
+
+
 
 }

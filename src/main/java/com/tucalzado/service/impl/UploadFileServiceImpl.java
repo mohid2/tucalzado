@@ -3,7 +3,7 @@ package com.tucalzado.service.impl;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
-import com.tucalzado.entity.ImageUrl;
+import com.tucalzado.models.entity.ImageUrl;
 import com.tucalzado.repository.IImageUrlRepository;
 import com.tucalzado.service.IUploadFileService;
 import lombok.extern.slf4j.Slf4j;

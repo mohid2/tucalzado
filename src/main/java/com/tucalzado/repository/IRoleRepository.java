@@ -1,7 +1,7 @@
 package com.tucalzado.repository;
 
-import com.tucalzado.entity.Role;
-import com.tucalzado.entity.enums.RoleEnum;
+import com.tucalzado.models.entity.Role;
+import com.tucalzado.models.enums.RoleEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

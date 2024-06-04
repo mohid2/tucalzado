@@ -1,7 +1,7 @@
-package com.tucalzado.entity;
+package com.tucalzado.models.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tucalzado.entity.enums.ShoeSizeEnum;
+import com.tucalzado.models.enums.ShoeSizeEnum;
 import jakarta.persistence.*;
 import lombok.*;
 

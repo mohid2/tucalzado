@@ -155,10 +155,10 @@
                                 </div>
                             <!-- Otros elementos del formulario -->
                             <div class="row pb-3 mt-3">
-                                <div class="col d-grid">
-                                    <button class="btn btn-success btn-lg"  th:onclick="addToCart([[${shoe}]],getSelectedSize())" th:disabled="${#lists.size(shoe.shoeStocks) == 0}">
+                                <div class="col d-grid" th:if="${#lists.size(shoe.shoeStocks) != 0}">
+                                    <a class="btn btn-success btn-lg"  th:onclick="addToCart([[${shoe}]],getSelectedSize())">
                                         <i class="fas fa-cart-plus"></i> Añadir a la cesta
-                                    </button>
+                                    </a>
                                 </div>
                                 <div class="col d-grid">
                                     <a class="btn btn-success btn-lg" th:onclick="addFavoriteProduct([[${shoe}]])" >
@@ -261,10 +261,10 @@
 <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/assets/js/templatemo.js}"></script>
 <script th:src="@{/assets/js/custom.js}"></script>
-<script th:src="@{/assets/js/cartService.js}"></script>
 <script th:src="@{/assets/js/slick.min.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script th:src="@{/assets/js/products-favorite.js}"></script>
+<script th:src="@{/assets/js/cartService.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script th:inline="javascript">
     $(document).ready(function() {
         $('#carousel-related-product').slick({

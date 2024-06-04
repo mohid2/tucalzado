@@ -1,9 +1,10 @@
-package com.tucalzado.entity;
+package com.tucalzado.models.entity;
 
-import com.tucalzado.entity.enums.Gender;
-import com.tucalzado.entity.enums.ShoeTypeEnum;
+import com.tucalzado.models.enums.Gender;
+import com.tucalzado.models.enums.ShoeTypeEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -22,24 +23,26 @@ public  class Shoe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
     private String imagePrimary;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "shoe_id")
     private List<ImageUrl> imageUrl;
-    @NotEmpty
+    @NotBlank
     private String name;
-    @NotEmpty
+    @NotBlank
     private String brand;
     private double rating;
     private double price;
     @Column(length = 10000)
     @Size(min = 50, max = 1000 , message = "La descripción debe tener entre 50 y 1000 caracteres")
     private String description;
+    @NotNull(message = "El genero es requerido")
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @NotBlank
     private String color;
     private LocalDateTime createdAt;
+    @NotNull(message = "El tipo de calzado es requerido")
     @Enumerated(EnumType.STRING)
     private ShoeTypeEnum type;
     @OneToMany(mappedBy = "shoe", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -61,4 +64,5 @@ public  class Shoe implements Serializable {
             this.rating = Math.round(ratings.stream().mapToInt(Rating::getRatingValue).average().orElse(0.0));
         }
     }
+
 }

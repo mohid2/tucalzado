@@ -1,4 +1,4 @@
-package com.tucalzado.entity;
+package com.tucalzado.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

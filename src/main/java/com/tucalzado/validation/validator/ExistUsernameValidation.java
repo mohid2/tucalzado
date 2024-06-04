@@ -14,9 +14,6 @@ public class ExistUsernameValidation implements ConstraintValidator<ExistUsernam
     @Autowired
     private IUserRepository userRepository;
 
-    public ExistUsernameValidation() {
-    }
-
     @Override
     public boolean isValid(String username, ConstraintValidatorContext context) {
         // Verificar si el username ya existe en el repositorio

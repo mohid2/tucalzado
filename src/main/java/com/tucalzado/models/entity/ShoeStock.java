@@ -1,4 +1,4 @@
-package com.tucalzado.entity;
+package com.tucalzado.models.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

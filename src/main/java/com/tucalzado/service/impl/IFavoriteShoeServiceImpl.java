@@ -1,7 +1,7 @@
 package com.tucalzado.service.impl;
 
 
-import com.tucalzado.entity.FavoriteShoe;
+import com.tucalzado.models.entity.FavoriteShoe;
 import com.tucalzado.repository.IFavoriteShoeRepository;
 import com.tucalzado.service.IFavoriteShoeService;
 import org.springframework.stereotype.Service;

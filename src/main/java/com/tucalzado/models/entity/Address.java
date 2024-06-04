@@ -1,4 +1,4 @@
-package com.tucalzado.entity;
+package com.tucalzado.models.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,8 +27,5 @@ public class Address implements Serializable {
     private String number;
     private String floor;
     private String door;
-//    @OneToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
 
 }

@@ -1,9 +1,9 @@
 package com.tucalzado.service.impl;
 
 
-import com.tucalzado.entity.Rating;
-import com.tucalzado.entity.Shoe;
-import com.tucalzado.entity.User;
+import com.tucalzado.models.entity.Rating;
+import com.tucalzado.models.entity.Shoe;
+import com.tucalzado.models.entity.User;
 import com.tucalzado.repository.IShoeRepository;
 import com.tucalzado.repository.IUserRepository;
 import com.tucalzado.repository.RatingRepository;

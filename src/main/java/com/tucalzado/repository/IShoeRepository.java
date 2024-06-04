@@ -1,8 +1,8 @@
 package com.tucalzado.repository;
 
 
-import com.tucalzado.entity.Shoe;
-import com.tucalzado.entity.enums.ShoeTypeEnum;
+import com.tucalzado.models.entity.Shoe;
+import com.tucalzado.models.enums.ShoeTypeEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

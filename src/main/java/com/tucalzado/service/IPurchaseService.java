@@ -2,8 +2,8 @@ package com.tucalzado.service;
 
 
 
-import com.tucalzado.entity.Purchase;
-import com.tucalzado.entity.User;
+import com.tucalzado.models.entity.Purchase;
+import com.tucalzado.models.entity.User;
 
 import java.util.List;
 

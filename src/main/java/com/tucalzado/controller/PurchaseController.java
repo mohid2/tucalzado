@@ -1,7 +1,7 @@
 package com.tucalzado.controller;
 
-import com.tucalzado.entity.Purchase;
-import com.tucalzado.entity.User;
+import com.tucalzado.models.entity.Purchase;
+import com.tucalzado.models.entity.User;
 import com.tucalzado.service.IPurchaseService;
 import com.tucalzado.service.IRatingService;
 import com.tucalzado.service.IUserService;

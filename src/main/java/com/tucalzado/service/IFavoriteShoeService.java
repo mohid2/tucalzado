@@ -1,7 +1,7 @@
 package com.tucalzado.service;
 
 
-import com.tucalzado.entity.FavoriteShoe;
+import com.tucalzado.models.entity.FavoriteShoe;
 
 import java.util.List;
 

@@ -25,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-         com.tucalzado.entity.User user = userRepository.findByUsername(username).orElseThrow();
+         com.tucalzado.models.entity.User user = userRepository.findByUsername(username).orElseThrow();
 
         List<SimpleGrantedAuthority> grantedAuthorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole().name())).toList();

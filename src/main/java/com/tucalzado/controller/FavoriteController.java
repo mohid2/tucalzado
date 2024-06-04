@@ -1,8 +1,8 @@
 package com.tucalzado.controller;
 
 
-import com.tucalzado.entity.FavoriteShoe;
-import com.tucalzado.entity.User;
+import com.tucalzado.models.entity.FavoriteShoe;
+import com.tucalzado.models.entity.User;
 import com.tucalzado.service.IFavoriteShoeService;
 import com.tucalzado.service.IUserService;
 import org.apache.http.HttpStatus;

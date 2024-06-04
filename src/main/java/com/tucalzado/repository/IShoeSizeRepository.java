@@ -1,7 +1,7 @@
 package com.tucalzado.repository;
 
-import com.tucalzado.entity.Size;
-import com.tucalzado.entity.enums.ShoeSizeEnum;
+import com.tucalzado.models.entity.Size;
+import com.tucalzado.models.enums.ShoeSizeEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

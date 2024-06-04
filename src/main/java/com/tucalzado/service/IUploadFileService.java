@@ -1,7 +1,7 @@
 package com.tucalzado.service;
 
 
-import com.tucalzado.entity.ImageUrl;
+import com.tucalzado.models.entity.ImageUrl;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

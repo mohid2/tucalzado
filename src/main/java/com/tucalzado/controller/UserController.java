@@ -1,8 +1,8 @@
 package com.tucalzado.controller;
 
 
-import com.tucalzado.entity.Address;
-import com.tucalzado.entity.User;
+import com.tucalzado.models.dto.AddressDTO;
+import com.tucalzado.models.dto.UserDTO;
 import com.tucalzado.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
@@ -54,15 +54,15 @@ public class UserController {
             flash.addFlashAttribute("errorMessage","El usuario ya ha iniciado sesion");
             return "redirect:/tienda";
         }
-        model.addAttribute("user",new User());
+        model.addAttribute("user", new UserDTO());
         return "user/register";
     }
     @PostMapping("/registro")
-    public String register(@Valid @ModelAttribute("user") User user, BindingResult result, Model model )  {
+    public String register(@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult result, Model model )  {
         if (result.hasErrors()) {
             return "user/register";
         }
-        userService.createUser(user);
+        userService.createUser(userDTO);
         return "redirect:/iniciar-sesion";
     }
 
@@ -75,18 +75,18 @@ public class UserController {
             String username = userDetails.getUsername();
             model.addAttribute("user", userService.getUserByUsername(username).orElseThrow());
         }
-        model.addAttribute("address",new Address());
+        model.addAttribute("address",new AddressDTO());
         return "user/user";
     }
 
     @PostMapping("/perfil")
-    public String updateUser(@ModelAttribute("user") User user, Model model) {
-        userService.updateUser(user);
+    public String updateUser(@ModelAttribute("user") UserDTO userDTO, Model model) {
+        userService.updateUser(userDTO);
         return "redirect:/tienda";
     }
     @PostMapping("/perfil/direccion")
-    public String updateAddressUser(@ModelAttribute("address") Address address,@RequestParam("userId") Long userId, Model model) {
-        userService.updateAddressUser(address,userId);
+    public String updateAddressUser(@ModelAttribute("address") AddressDTO addressDTO,@RequestParam("userId") Long userId, Model model) {
+        userService.updateAddressUser(addressDTO,userId);
         return "redirect:/perfil";
     }
 

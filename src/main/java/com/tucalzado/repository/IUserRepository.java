@@ -1,6 +1,6 @@
 package com.tucalzado.repository;
 
-import com.tucalzado.entity.User;
+import com.tucalzado.models.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

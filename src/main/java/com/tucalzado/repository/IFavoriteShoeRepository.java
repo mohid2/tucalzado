@@ -1,7 +1,7 @@
 package com.tucalzado.repository;
 
 
-import com.tucalzado.entity.FavoriteShoe;
+import com.tucalzado.models.entity.FavoriteShoe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

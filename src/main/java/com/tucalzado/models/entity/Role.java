@@ -1,6 +1,6 @@
-package com.tucalzado.entity;
+package com.tucalzado.models.entity;
 
-import com.tucalzado.entity.enums.RoleEnum;
+import com.tucalzado.models.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

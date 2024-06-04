@@ -1,7 +1,6 @@
 package com.tucalzado.validation.validator;
 
 import com.tucalzado.repository.IUserRepository;
-import com.tucalzado.service.IUserService;
 import com.tucalzado.validation.anotation.ExistEmail;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -13,15 +12,7 @@ import org.springframework.stereotype.Component;
 public class ExistEmailValidation implements ConstraintValidator<ExistEmail,String> {
 
     @Autowired
-    private IUserService userService;
-
-    public ExistEmailValidation() {
-    }
-
-    @Override
-    public void initialize(ExistEmail existEmail) {
-        ConstraintValidator.super.initialize(existEmail);
-    }
+    private IUserRepository userRepository;
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
@@ -29,6 +20,6 @@ public class ExistEmailValidation implements ConstraintValidator<ExistEmail,Stri
             return false;
         }
         // Verificar si el email ya existe en el repositorio
-        return !userService.findByEmail(email).isPresent();
+        return !userRepository.findByEmail(email).isPresent();
     }
 }

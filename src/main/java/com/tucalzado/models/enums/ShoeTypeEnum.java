@@ -1,4 +1,4 @@
-package com.tucalzado.entity.enums;
+package com.tucalzado.models.enums;
 
 import lombok.Getter;
 
@@ -7,7 +7,7 @@ public enum ShoeTypeEnum  {
     ZAPATOS("Zapatos"),
     ZAPATOS_CLÁSICO("Zapatos clásicos"),
     ZAPATILLAS("Zapatillas"),
-    ZAPATILLAS_CASUALES("Zapatillas casuales"),
+    ZAPATILLAS_DEPORTIVAS("Zapatillas deportivas"),
     SANDALIAS("Sandalías"),
     BOTINES("Botines"),
     TACONES("Tacones"),
