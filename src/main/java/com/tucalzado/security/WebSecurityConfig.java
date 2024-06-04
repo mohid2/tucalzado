@@ -37,7 +37,8 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz->
                         authz.requestMatchers(resources).permitAll()
-                                .requestMatchers("/","/registro","/iniciar-sesion","/error/**").permitAll()
+                                .requestMatchers("/","/tienda","/producto/**","/registro","/iniciar-sesion","/sobre-nosotros","/contacto","/error/**").permitAll()
+                                .requestMatchers("/agregar/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
                 .formLogin((form) -> form
                         .loginPage("/iniciar-sesion")
