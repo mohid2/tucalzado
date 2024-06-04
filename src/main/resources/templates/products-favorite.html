@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{layout/layout :: head}">
+</head>
+<style>
+    #productos-container .card {
+        height: auto; /* Ajusta la altura automáticamente */
+    }
+
+    #productos-container .card-body {
+        padding: 10px; /* Ajusta el espacio interno del cuerpo del card */
+    }
+
+    #productos-container .card-img {
+        max-height: 200px; /* Establece la altura máxima de la imagen */
+    }
+</style>
+<body>
+<header th:replace="~{layout/layout :: header}">
+</header>
+<div class="container-fluid bg-light py-5">
+    <div class="row">
+        <div class="col-md-6 m-auto text-center">
+            <div class="row p-2 pb-3">
+                <h1 class="h1 text-success"><strong>Favoritos</strong></h1>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<div class="container py-5">
+    <div class="col-lg-10 mx-auto">
+        <div class="row justify-content-between">
+            <div class="container" id="productos-container">
+                <div class="row">
+                    <!-- Iterar sobre la lista de productos favoritos -->
+                    <div class="col-sm-6 col-md-4 col-lg-3" th:each="favorite : ${favoriteProduct}">
+                        <div class="card mb-4 product-wap rounded-0 card-small">
+                            <div class="card rounded-0">
+                                <img class="card-img" th:src="${favorite.shoe.getImagePrimary}" alt="Imagen del producto">
+                                <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                    <ul class="list-unstyled">
+                                        <li><a class="btn btn-success text-white" href="#" th:onclick="removeFavoriteProduct([[${favorite.id}]])"><i class="far fa-trash-alt"></i></a></li>
+                                        <li><a class="btn btn-success text-white mt-2" th:href="@{/producto/{id}(id=${favorite.shoe.id})}"><i class="far fa-eye"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <a class="h3 text-decoration-none" th:href="@{/producto/{id}(id=${favorite.shoe.id})}" th:text="${favorite.shoe.name}">Oupidatat non</a>
+                                <ul class="list-unstyled d-flex justify-content-center mb-1">
+                                    <li>
+                                        <i class="fa fa-star" th:classappend="${favorite.shoe.rating >= 1} ? 'text-warning' : 'text-secondary'"></i>
+                                        <i class="fa fa-star" th:classappend="${favorite.shoe.rating >= 2} ? 'text-warning' : 'text-secondary'"></i>
+                                        <i class="fa fa-star" th:classappend="${favorite.shoe.rating >= 3} ? 'text-warning' : 'text-secondary'"></i>
+                                        <i class="fa fa-star" th:classappend="${favorite.shoe.rating >= 4} ? 'text-warning' : 'text-secondary'"></i>
+                                        <i class="fa fa-star" th:classappend="${favorite.shoe.rating >= 5} ? 'text-warning' : 'text-secondary'"></i>
+                                    </li>
+                                </ul>
+                                <p class="text-center mb-0" th:text="${#numbers.formatDecimal(favorite.shoe.price, 2, 'COMMA', 2, 'COMMA')} + ' €'"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<div class="container-fluid bg-light py-5">
+</div>
+<!-- Fin del contenedor -->
+<!-- Start Footer -->
+<footer th:replace="~{layout/layout :: footer}">
+</footer>
+<!-- End Footer -->
+<!-- Start Script -->
+<script src="assets/js/jquery-1.11.0.min.js"></script>
+<script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/templatemo.js"></script>
+<script src="assets/js/custom.js"></script>
+<script src="assets/js/cartService.js"></script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+
+    function removeFavoriteProduct(favoriteId) {
+        fetch('/favoritos/' + favoriteId, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Product removed from favorites successfully');
+                location.reload(); // Reload the page to update the list of favorite products
+            } else {
+                console.error('Error removing product from favorites:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error removing product from favorites:', error);
+        });
+    }
+</script>
+</body>
+</html>
