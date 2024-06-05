@@ -37,6 +37,6 @@ public class UserDTO {
     @NotEmpty
     private String mobile;
     private String fix;
-    private Address address;
+    private AddressDTO address;
     private List<Role> roles;
 }

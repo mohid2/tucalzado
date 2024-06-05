@@ -1,5 +1,8 @@
-package com.tucalzado.models.entity;
+package com.tucalzado.models.dto;
 
+import com.tucalzado.models.entity.ImageUrl;
+import com.tucalzado.models.entity.Rating;
+import com.tucalzado.models.entity.ShoeStock;
 import com.tucalzado.models.enums.Gender;
 import com.tucalzado.models.enums.ShoeTypeEnum;
 import jakarta.persistence.*;
@@ -8,49 +11,38 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @Builder
 @Getter
 @Setter
-@Entity
-@Table(name = "shoes")
-public  class Shoe implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@AllArgsConstructor
+@NoArgsConstructor
+public class ShoeDTO {
     private Long id;
     private String imagePrimary;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "shoe_id")
     private List<ImageUrl> imageUrl;
+    @NotBlank
     private String name;
+    @NotBlank
     private String brand;
     private double rating;
     private double price;
-    @Column(length = 10000)
+    @Size(min = 50, max = 1000 , message = "La descripción debe tener entre 50 y 1000 caracteres")
     private String description;
-    @Enumerated(EnumType.STRING)
+    @NotNull(message = "El genero es requerido")
     private Gender gender;
+    @NotBlank
     private String color;
     private LocalDateTime createdAt;
-    @Enumerated(EnumType.STRING)
+    @NotNull(message = "El tipo de calzado es requerido")
     private ShoeTypeEnum type;
-    @OneToMany(mappedBy = "shoe", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<ShoeStock> shoeStocks;
-
-    @OneToMany(mappedBy = "shoe", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Rating> ratings;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
     public void updateRating() {
         if (ratings == null || ratings.isEmpty()) {
             this.rating = 0;

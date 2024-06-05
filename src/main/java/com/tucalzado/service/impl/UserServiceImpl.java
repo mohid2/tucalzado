@@ -8,18 +8,21 @@ import com.tucalzado.models.dto.AddressDTO;
 import com.tucalzado.models.dto.UserDTO;
 import com.tucalzado.models.enums.RoleEnum;
 import com.tucalzado.models.entity.User;
-import com.tucalzado.models.mapper.AddressMapper;
-import com.tucalzado.models.mapper.UserMapper;
+import com.tucalzado.models.mapper.IAddressMapper;
+import com.tucalzado.models.mapper.IUserMapper;
 import com.tucalzado.repository.IAddressRepository;
 import com.tucalzado.repository.IRoleRepository;
 import com.tucalzado.repository.IUserRepository;
 import com.tucalzado.service.IUserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements IUserService {
 
@@ -27,22 +30,24 @@ public class UserServiceImpl implements IUserService {
     private final IAddressRepository addressRepository;
     private final PasswordEncoder passwordEncoder;
     private final IRoleRepository roleRepository;
-    private final UserMapper userMapper;
-    private final AddressMapper addressMapper;
+    private final IUserMapper userMapper;
+    private final IAddressMapper addressMapper;
 
 
     @Override
     public User createUser(UserDTO userDTO)  {
         Role roleAdmin = roleRepository.findByRole(RoleEnum.ADMIN).orElseThrow(() -> new RuntimeException("Role not found"));
         Role roleUser = roleRepository.findByRole(RoleEnum.USER).orElseThrow(() -> new RuntimeException("Role not found"));
+        userDTO.setRoles(List.of(roleUser, roleAdmin));
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        User user = userMapper.mapToEntity(userDTO);
+        User user = userMapper.userDTOToUser(userDTO);
         return userRepository.save(user);
     }
 
     @Override
-    public Optional<User> getUserByUsername(String name) {
-        return userRepository.findByUsername(name);
+    public UserDTO getUserByUsername(String name) {
+        Optional<User> userOptional = userRepository.findByUsername(name);
+        return userOptional.map(userMapper::userToUserDTO).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
@@ -59,46 +64,39 @@ public class UserServiceImpl implements IUserService {
         return null;
     }
     @Override
-    public void deleteUser(User user) {
-        userRepository.delete(user);
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public UserDTO getUserById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        return userOptional.map(userMapper::userToUserDTO).orElseThrow(() -> new EntityNotFoundException("User not found with id " + id));
     }
 
     @Override
     public void updateAddressUser(AddressDTO addressDTO, Long userId) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if(userOptional.isPresent()){
-            User userUpdated = userOptional.get();
-            if (userUpdated.getAddress() != null) {
-                Optional<Address> addressOptional = addressRepository.findById(userUpdated.getAddress().getId());
-                if(addressOptional.isPresent()){
-                    Address addressUpdated = getAddress(addressDTO, addressOptional);
-                    userUpdated.setAddress(addressUpdated);
-                    userRepository.save(userUpdated);
-                }
-            }else {
-                userUpdated.setAddress(addressMapper.mapToEntity(addressDTO));
-                userRepository.save(userUpdated);
-            }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id " + userId));
 
+        Address address = user.getAddress();
+        if (address != null) {
+            updateExistingAddress(addressDTO, address);
+        } else {
+            user.setAddress(addressMapper.addressDTOToAddress(addressDTO));
         }
+        userRepository.save(user);
     }
-
-    private static Address getAddress(AddressDTO addressDTO, Optional<Address> addressOptional) {
-        Address  addressUpdated = addressOptional.get();
-        addressUpdated.setCountry(addressDTO.getCountry());
-        addressUpdated.setCommunity(addressDTO.getCommunity());
-        addressUpdated.setProvince(addressDTO.getProvince());
-        addressUpdated.setCity(addressDTO.getCity());
-        addressUpdated.setZipCode(addressDTO.getZipCode());
-        addressUpdated.setStreet(addressDTO.getStreet());
-        addressUpdated.setNumber(addressDTO.getNumber());
-        addressUpdated.setFloor(addressDTO.getFloor());
-        addressUpdated.setDoor(addressDTO.getDoor());
-        return addressUpdated;
+    private void updateExistingAddress(AddressDTO addressDTO, Address address) {
+        address.setCountry(addressDTO.getCountry());
+        address.setCommunity(addressDTO.getCommunity());
+        address.setProvince(addressDTO.getProvince());
+        address.setCity(addressDTO.getCity());
+        address.setZipCode(addressDTO.getZipCode());
+        address.setStreet(addressDTO.getStreet());
+        address.setNumber(addressDTO.getNumber());
+        address.setFloor(addressDTO.getFloor());
+        address.setDoor(addressDTO.getDoor());
+        addressRepository.save(address);
     }
 }

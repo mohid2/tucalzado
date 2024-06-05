@@ -10,10 +10,10 @@ import java.util.Optional;
 
 public interface IUserService {
     User createUser(UserDTO userDTO);
-    Optional<User> getUserByUsername(String name);
+    UserDTO getUserByUsername(String name);
     User updateUser(UserDTO  userDTO);
-    void deleteUser(User user);
-    Optional<User> getUserById(Long id);
+    void deleteUser(Long userId);
+    UserDTO getUserById(Long id);
     void updateAddressUser(AddressDTO addressDTO, Long userId);
 
 }

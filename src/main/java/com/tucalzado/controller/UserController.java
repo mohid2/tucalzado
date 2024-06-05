@@ -73,7 +73,7 @@ public class UserController {
         if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String username = userDetails.getUsername();
-            model.addAttribute("user", userService.getUserByUsername(username).orElseThrow());
+            model.addAttribute("user", userService.getUserByUsername(username));
         }
         model.addAttribute("address",new AddressDTO());
         return "user/user";
