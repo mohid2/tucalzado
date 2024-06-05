@@ -1,6 +1,7 @@
 package com.tucalzado.models.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,20 +9,18 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Setter
-@Getter
 @Entity
 @Table(name = "favorite_products")
 public class FavoriteShoe {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @EmbeddedId
+    private FavoriteShoeId id;
+    @ManyToOne
+    @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @MapsId("shoeId")
     @JoinColumn(name = "shoe_id")
     private Shoe shoe;
 }

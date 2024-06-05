@@ -1,6 +1,5 @@
   function addFavoriteProduct(shoe) {
-
-        const favoriteProduct = {
+        const favoriteShoeDTO = {
             user: null,
             shoe: shoe
         };
@@ -9,7 +8,7 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(favoriteProduct)
+            body: JSON.stringify(favoriteShoeDTO)
         })
         .then(response => {
             if (response.ok) {
@@ -46,5 +45,27 @@
                 showConfirmButton: false,
                 timer: 1500
             });
+        });
+    }
+
+    function removeFavoriteProduct(favoriteId) {
+        console.log('Removing product from favorites:', favoriteId);
+         fetch('/favoritos/borrar', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(favoriteId)
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Product removed from favorites successfully');
+                location.reload(); // Reload the page to update the list of favorite products
+            } else {
+                console.error('Error removing product from favorites:', response.status);
+            }
+        })
+        .catch(error => {
+            console.error('Error removing product from favorites:', error);
         });
     }

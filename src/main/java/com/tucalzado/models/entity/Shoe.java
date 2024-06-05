@@ -11,12 +11,10 @@ import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
-@Setter
 @Entity
 @Table(name = "shoes")
 public  class Shoe implements Serializable {

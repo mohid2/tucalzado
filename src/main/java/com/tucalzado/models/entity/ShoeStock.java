@@ -14,19 +14,16 @@ import java.io.Serializable;
 @Entity
 @Table(name = "shoe_stock")
 public class ShoeStock implements Serializable {
-    @EmbeddedId
+    @Id
     private ShoeStockId id;
-
     @ManyToOne
     @MapsId("shoeId")
-    @JoinColumn(name = "shoe_id")
+    @JoinColumn(name = "shoe_id" ,insertable = false, updatable = false)
     @JsonIgnore
     private Shoe shoe;
-
     @ManyToOne
     @MapsId("sizeId")
-    @JoinColumn(name = "size_id")
+    @JoinColumn(name = "size_id" ,insertable = false, updatable = false)
     private Size size;
-
     private int stock;
 }

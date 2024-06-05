@@ -1,12 +1,14 @@
 package com.tucalzado.service;
 
 
+import com.tucalzado.models.dto.FavoriteShoeDTO;
 import com.tucalzado.models.entity.FavoriteShoe;
+import com.tucalzado.models.entity.FavoriteShoeId;
 
 import java.util.List;
 
 public interface IFavoriteShoeService {
-    void save(FavoriteShoe favoriteProduct);
-    void delete(Long id);
+    boolean save(FavoriteShoeDTO favoriteShoeDTO,String username);
+    void delete(FavoriteShoeId id);
     List<FavoriteShoe> findAllByUserId(Long userId);
 }

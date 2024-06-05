@@ -5,7 +5,7 @@ import com.tucalzado.models.entity.Rating;
 import com.tucalzado.models.entity.ShoeStock;
 import com.tucalzado.models.enums.Gender;
 import com.tucalzado.models.enums.ShoeTypeEnum;
-import jakarta.persistence.*;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,8 +16,6 @@ import java.util.List;
 
 @Data
 @Builder
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShoeDTO {

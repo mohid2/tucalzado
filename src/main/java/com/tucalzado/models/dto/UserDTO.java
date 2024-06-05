@@ -1,7 +1,7 @@
 package com.tucalzado.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tucalzado.models.entity.Address;
 import com.tucalzado.models.entity.Role;
 import com.tucalzado.validation.anotation.ExistEmail;
 import com.tucalzado.validation.anotation.ExistUsername;
@@ -13,8 +13,6 @@ import lombok.*;
 import java.util.List;
 @Data
 @Builder
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {

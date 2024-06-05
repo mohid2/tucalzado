@@ -83,29 +83,10 @@
 <script src="assets/js/templatemo.js"></script>
 <script src="assets/js/custom.js"></script>
 <script src="assets/js/cartService.js"></script>
+<script src="assets/js/products-favorite.js"></script>
 <script>
     function goBack() {
         window.history.back();
-    }
-
-    function removeFavoriteProduct(favoriteId) {
-        fetch('/favoritos/' + favoriteId, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('Product removed from favorites successfully');
-                location.reload(); // Reload the page to update the list of favorite products
-            } else {
-                console.error('Error removing product from favorites:', response.status);
-            }
-        })
-        .catch(error => {
-            console.error('Error removing product from favorites:', error);
-        });
     }
 </script>
 </body>
