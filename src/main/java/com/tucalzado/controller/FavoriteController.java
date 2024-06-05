@@ -28,10 +28,12 @@ public class FavoriteController {
 
 
     @GetMapping("/favoritos")
-    public String getFavorite(Model model) {
-        UserDTO user =  userService.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        List<FavoriteShoe> favoriteProduct =  iFavoriteProductService.findAllByUserId(user.getId());
-        model.addAttribute("favoriteProduct",favoriteProduct);
+    public String getFavorite(Model model,Principal principal) {
+        if(principal==null || principal.getName().equals("anonymousUser")) {
+            return "redirect:/iniciar-sesion";
+        }
+        UserDTO user =  userService.getUserByUsername(principal.getName());
+        model.addAttribute("favoriteProduct",iFavoriteProductService.findAllByUserId(user.getId()));
         return "products-favorite";
     }
 
@@ -48,9 +50,11 @@ public class FavoriteController {
         return ResponseEntity.badRequest().build();
     }
 
-
     @DeleteMapping("/favoritos/borrar")
     public ResponseEntity<?> deleteFavorite(@RequestBody FavoriteShoeId id) {
+        if (id == null) {
+            return ResponseEntity.badRequest().build();
+        }
         iFavoriteProductService.delete(id);
         return ResponseEntity.ok("ok");
     }
