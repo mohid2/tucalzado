@@ -1,40 +1,39 @@
 package com.tucalzado.service.impl;
 
 
+import com.tucalzado.models.dto.UserDTO;
 import com.tucalzado.models.entity.*;
+import com.tucalzado.models.mapper.IUserMapper;
 import com.tucalzado.repository.IItemRepository;
 import com.tucalzado.repository.IPurchaseRepository;
 import com.tucalzado.repository.IShoeStockRepository;
+import com.tucalzado.repository.IUserRepository;
 import com.tucalzado.service.IPurchaseService;
 import com.tucalzado.service.IShoeService;
-import com.tucalzado.service.IUserService;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
+@RequiredArgsConstructor
 @Service
 public class PurchaseServiceImpl implements IPurchaseService {
-    private final IUserService userService;
+    private final IUserRepository userRepository ;
     private final IPurchaseRepository purchaseRepository;
     private final IItemRepository itemRepository;
     private final IShoeService shoeService;
     private final IShoeStockRepository shoeStockRepository;
+    private final IUserMapper userMapper;
 
-    public PurchaseServiceImpl(IItemRepository itemRepository, IUserService userService, IPurchaseRepository purchaseRepository, IShoeService shoeService, IShoeStockRepository shoeStockRepository) {
-        this.itemRepository = itemRepository;
-        this.userService = userService;
-        this.purchaseRepository = purchaseRepository;
-        this.shoeService = shoeService;
-        this.shoeStockRepository = shoeStockRepository;
-    }
+
 
     @Override
     @Transactional
     public boolean savePurchase(Purchase purchase, String username) {
         if (verifyExistsShoeStock(purchase.getItems())) {
-            Optional<User> user = userService.getUserByUsername(username);
+            Optional<User> user = userRepository.findByUsername(username);
             if (user.isPresent()) {
                 purchase.setUser(user.get());
                 purchase.setDate(purchase.getDate());
@@ -96,8 +95,8 @@ public class PurchaseServiceImpl implements IPurchaseService {
 
 
     @Override
-    public List<Purchase> getPurchaseByUser(User user) {
-        return purchaseRepository.findAllByUser(user);
+    public List<Purchase> getPurchaseByUser(UserDTO userDTO) {
+        return purchaseRepository.findAllByUser(userMapper.userDTOToUser(userDTO));
     }
 
     @Override

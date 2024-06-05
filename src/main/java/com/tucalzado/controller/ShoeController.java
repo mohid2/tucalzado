@@ -1,6 +1,7 @@
 package com.tucalzado.controller;
 
 
+import com.tucalzado.models.dto.ShoeDTO;
 import com.tucalzado.models.entity.Shoe;
 import com.tucalzado.models.entity.ShoeStock;
 import com.tucalzado.models.entity.Size;
@@ -91,7 +92,7 @@ public class ShoeController {
         List<Size> sizes = iShoeSizeRepository.findAll();
         model.addAttribute("sizes", sizes);
         model.addAttribute("genders", Gender.values());
-        model.addAttribute("shoe", new Shoe());
+        model.addAttribute("shoe", new ShoeDTO());
         return "add_shoe_form";
     }
 

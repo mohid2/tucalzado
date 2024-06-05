@@ -1,5 +1,6 @@
 package com.tucalzado.controller;
 
+import com.tucalzado.models.dto.UserDTO;
 import com.tucalzado.models.entity.Purchase;
 import com.tucalzado.models.entity.User;
 import com.tucalzado.service.IPurchaseService;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.security.Principal;
+
 
 @Controller
 public class PurchaseController {
@@ -31,26 +34,25 @@ public class PurchaseController {
     }
 
     @GetMapping("/carrito")
-    public String getCart(Model model) {
+    public String getCart(Model model,Principal principal) {
         model.addAttribute("purchase", new Purchase());
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername();
-            userService.getUserByUsername(username).ifPresent(user ->model.addAttribute("user", user));
+        if(principal==null || principal.getName().equals("anonymousUser")) {
+            return "redirect:/iniciar-sesion";
         }
+        String username = principal.getName();
+        UserDTO user = userService.getUserByUsername(username);
+        model.addAttribute("user", user);
         return "cart";
     }
     @GetMapping("/mis-compras")
-    public String getPurchase(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername();
-            User user = userService.getUserByUsername(username).orElseThrow();
-            model.addAttribute("user",user);
-            model.addAttribute("purchases",purchaseService.getPurchaseByUser(user));
+    public String getPurchase(Model model,Principal principal) {
+        if(principal==null || principal.getName().equals("anonymousUser")) {
+            return "redirect:/iniciar-sesion";
         }
+        String username = principal.getName();
+        UserDTO user = userService.getUserByUsername(username);
+        model.addAttribute("user",user);
+        model.addAttribute("purchases",purchaseService.getPurchaseByUser(user));
         return "purchases";
     }
     @PostMapping("/mis-compras")
@@ -69,7 +71,7 @@ public class PurchaseController {
     @GetMapping("/mis-compras/{id}")
     public String getPurchaseByUser(@PathVariable Long id, Model model) {
         Purchase purchase = purchaseService.getPurchaseById(id);
-        User user = userService.getUserById(purchase.getUser().getId()).orElseThrow();
+        UserDTO user = userService.getUserById(purchase.getUser().getId());
 
         // Asume que purchaseService.getPurchaseById(id) y userService.getUserById(id) ya están implementados
         purchase.getItems().forEach(item -> {
