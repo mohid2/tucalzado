@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface IFavoriteShoeRepository extends JpaRepository<FavoriteShoe, FavoriteShoeId> {
     List<FavoriteShoe> findAllByUserId(Long userId);
+
+    void deleteByShoeId(Long id);
 }

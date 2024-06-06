@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 public interface IUploadFileService {
-    Resource load(String filename) throws MalformedURLException;
     ImageUrl save(MultipartFile file) throws IOException;
     boolean delete(String filename);
 }

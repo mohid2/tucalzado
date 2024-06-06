@@ -2,10 +2,10 @@ package com.tucalzado.controller;
 
 import com.tucalzado.models.dto.UserDTO;
 import com.tucalzado.models.entity.Purchase;
-import com.tucalzado.models.entity.User;
 import com.tucalzado.service.IPurchaseService;
 import com.tucalzado.service.IRatingService;
 import com.tucalzado.service.IUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
 
-
+@RequiredArgsConstructor
 @Controller
 public class PurchaseController {
 
@@ -27,11 +27,6 @@ public class PurchaseController {
     private final IUserService userService;
     private final IRatingService ratingService;
 
-    public PurchaseController(IPurchaseService purchaseService, IUserService userService, IRatingService ratingService) {
-        this.purchaseService = purchaseService;
-        this.userService = userService;
-        this.ratingService = ratingService;
-    }
 
     @GetMapping("/carrito")
     public String getCart(Model model,Principal principal) {
@@ -86,9 +81,7 @@ public class PurchaseController {
 
     @GetMapping("/invoice/pdf/{id}")
     public String getInvoice(@PathVariable Long id, Model model) {
-        // Obtener la compra por id (simulado aquí)
         Purchase purchase = purchaseService.getPurchaseById(id);
-        // Añadir la compra al modelo
         model.addAttribute("purchase", purchase);
         return "invoice/pdf";
     }

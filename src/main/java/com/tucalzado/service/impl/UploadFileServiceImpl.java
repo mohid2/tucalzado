@@ -6,6 +6,7 @@ import com.google.cloud.storage.*;
 import com.tucalzado.models.entity.ImageUrl;
 import com.tucalzado.repository.IImageUrlRepository;
 import com.tucalzado.service.IUploadFileService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -16,9 +17,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 @Slf4j
 public class UploadFileServiceImpl implements IUploadFileService {
@@ -28,14 +32,6 @@ public class UploadFileServiceImpl implements IUploadFileService {
     @Value("${firebase_private_key}")
     private String privateKeyFirebase;
 
-    public UploadFileServiceImpl(IImageUrlRepository imageUrlRepository) {
-        this.imageUrlRepository = imageUrlRepository;
-    }
-
-    @Override
-    public Resource load(String filename) throws MalformedURLException {
-      return null;
-    }
     @Override
     public ImageUrl save(MultipartFile image) throws IOException {
         InputStream credentialsStream = new ByteArrayInputStream(privateKeyFirebase.getBytes());
@@ -53,12 +49,58 @@ public class UploadFileServiceImpl implements IUploadFileService {
         String firebaseUrl = "https://firebasestorage.googleapis.com/v0/b/" + BUCKET_NAME + "/o/" + nameImage + "?alt=media";
         ImageUrl imageURL = new ImageUrl();
         imageURL.setUrl(firebaseUrl);
-        return imageUrlRepository.save(imageURL);
+//        return imageUrlRepository.save(imageURL);
+        return imageURL;
     }
 
     @Override
-    public boolean delete(String filename) {
-        // Implementa la lógica para eliminar la imagen del Firebase Storage
-        return false;
+    public boolean delete(String  fileUrl) {
+        try {
+            // Obtener las credenciales desde la cadena privada almacenada
+            InputStream credentialsStream = new ByteArrayInputStream(privateKeyFirebase.getBytes());
+            GoogleCredentials credentials = GoogleCredentials.fromStream(credentialsStream);
+
+            // Crear el servicio de Storage utilizando las credenciales
+            Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
+
+            // Extraer el nombre del archivo de la URL completa
+            String filename = extractFilenameFromUrl(fileUrl);
+            if (filename == null) {
+                return false;
+            }
+
+            // Construir el BlobId utilizando el nombre del archivo y el nombre del bucket
+            BlobId blobId = BlobId.of(BUCKET_NAME, filename);
+            // Eliminar el archivo del bucket
+            boolean deleted = storage.delete(blobId);
+            // Verificar si la eliminación fue exitosa
+            if (deleted) {
+                // Si fue exitoso, también puedes eliminar la entrada correspondiente de tu base de datos
+                // asumiendo que tienes una relación entre el nombre del archivo y el registro en tu repositorio
+                Optional<ImageUrl> imageUrlOptional = imageUrlRepository.findByUrlContaining(filename);
+                System.out.println();
+                imageUrlOptional.ifPresent(imageUrlRepository::delete);
+                return true;
+            } else {
+                // Si no se pudo eliminar, puedes manejar el error según sea necesario
+                return false;
+            }
+        } catch (IOException e) {
+            // Manejar excepciones de IO según sea necesario
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Extraer el nombre del archivo de la URL completa
+    private String extractFilenameFromUrl(String fileUrl) {
+        try {
+            URL url = new URL(fileUrl);
+            String path = url.getPath();
+            return path.substring(path.lastIndexOf("/") + 1);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

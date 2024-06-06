@@ -6,13 +6,11 @@ import com.tucalzado.models.entity.Shoe;
 import com.tucalzado.models.entity.ShoeStock;
 import com.tucalzado.models.entity.ShoeStockId;
 import com.tucalzado.models.enums.ShoeTypeEnum;
-import com.tucalzado.repository.IShoeRepository;
-import com.tucalzado.repository.IShoeSizeRepository;
-import com.tucalzado.repository.IShoeStockRepository;
+import com.tucalzado.repository.*;
 import com.tucalzado.service.IShoeService;
 import com.tucalzado.service.IUploadFileService;
 import com.tucalzado.util.paginator.PageUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,20 +24,16 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class ShoeServiceImpl implements IShoeService {
     private final IShoeRepository iShoeRepository;
     private final IShoeSizeRepository iShoeSizeRepository;
     private final IShoeStockRepository shoeStockRepository;
     private final IUploadFileService iUploadFileService;
+    private final IItemRepository iItemRepository;
+    private final IFavoriteShoeRepository iFavoriteShoeRepository;
     private static final List<String> SUPPORTED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png", "gif");
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Shoe> findAll() {
-        return iShoeRepository.findAll();
-    }
 
     @Override
     public Page<Shoe> findFilteredAndPaginatedProducts(int page,String gender,String type, int pageSize) {
@@ -62,19 +56,7 @@ public class ShoeServiceImpl implements IShoeService {
     @Override
     @Transactional
     public Shoe save(Shoe shoe, List<MultipartFile> images, MultipartFile imag, Map<String, String> formParams) throws IOException {
-        // Crear un mapa para almacenar los ID de talla y sus respectivos stocks
-        Map<Long, Integer> sizeStockMap = new HashMap<>();
-
-        // Iterar sobre los parámetros del formulario para obtener los datos del stock
-        for (Map.Entry<String, String> entry : formParams.entrySet()) {
-            String paramName = entry.getKey();
-            String paramValue = entry.getValue();
-            if (paramName.startsWith("stock-")) {
-                Long sizeId = Long.parseLong(paramName.substring("stock-".length()));
-                Integer stock = paramValue.isEmpty() ? 0 : Integer.parseInt(paramValue); // Convertir cadena vacía a 0
-                sizeStockMap.put(sizeId, stock);
-            }
-        }
+        Map<Long, Integer> sizeStockMap = getSizeStockMap(formParams);
 
         // Check if images are uploaded
         if (imag != null && !imag.isEmpty() || images != null && !images.isEmpty()) {
@@ -88,11 +70,14 @@ public class ShoeServiceImpl implements IShoeService {
             shoe.setImagePrimary(iUploadFileService.save(imag).getUrl());
             shoe.setImageUrl(imageUrls);
         }
-
         // Guardar el zapato primero
-        Shoe savedShoe = iShoeRepository.save(shoe);
+//        Shoe savedShoe = iShoeRepository.save(shoe);
+        Shoe savedShoe = null;
+        ShoeStockSave(sizeStockMap, savedShoe);
+        return savedShoe;
+    }
 
-        // Imprimir el mapa de tallas y stocks
+    private void ShoeStockSave(Map<Long, Integer> sizeStockMap, Shoe savedShoe) {
         for (Map.Entry<Long, Integer> entry : sizeStockMap.entrySet()) {
             Long sizeId = entry.getKey();
             Integer stock = entry.getValue();
@@ -102,11 +87,23 @@ public class ShoeServiceImpl implements IShoeService {
             shoeStock.setShoe(savedShoe);
             shoeStock.setSize(iShoeSizeRepository.findById(sizeId).orElseThrow(() -> new RuntimeException("Size not found")));
             shoeStock.setStock(stock);
-
             // Guardar ShoeStock
             shoeStockRepository.save(shoeStock);
         }
-        return savedShoe;
+    }
+    private  Map<Long, Integer> getSizeStockMap(Map<String, String> formParams) {
+        Map<Long, Integer> sizeStockMap = new HashMap<>();
+        // Iterar sobre los parámetros del formulario para obtener los datos del stock
+        for (Map.Entry<String, String> entry : formParams.entrySet()) {
+            String paramName = entry.getKey();
+            String paramValue = entry.getValue();
+            if (paramName.startsWith("stock-")) {
+                Long sizeId = Long.parseLong(paramName.substring("stock-".length()));
+                Integer stock = paramValue.isEmpty() ? 0 : Integer.parseInt(paramValue); // Convertir cadena vacía a 0
+                sizeStockMap.put(sizeId, stock);
+            }
+        }
+        return sizeStockMap;
     }
 
     public boolean validExtension(MultipartFile file) throws IOException {
@@ -135,6 +132,15 @@ public class ShoeServiceImpl implements IShoeService {
     @Override
     @Transactional
     public void deleteById(Long id) {
+        Shoe shoe = iShoeRepository.findById(id).orElseThrow();
+        for (ImageUrl image : shoe.getImageUrl()) {
+            iUploadFileService.delete(image.getUrl());
+        }
+        iUploadFileService.delete(shoe.getImagePrimary());
+        // Eliminar todas las referencias en favorite_products
+        iFavoriteShoeRepository.deleteByShoeId(shoe.getId());
+        iFavoriteShoeRepository.deleteByShoeId(shoe.getId());
+        iItemRepository.deleteByShoeId(shoe.getId());
         iShoeRepository.deleteById(id);
     }
 

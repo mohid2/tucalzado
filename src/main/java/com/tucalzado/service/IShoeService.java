@@ -14,11 +14,10 @@ import java.util.Optional;
 
 
 public interface IShoeService {
-    List<Shoe> findAll();
     Page<Shoe> findFilteredAndPaginatedProducts(int page, String gender,String type, int pageSize);
     Shoe save(Shoe shoe, List<MultipartFile> images, MultipartFile imag, Map<String, String> formParams) throws IOException;
     Optional<Shoe> findById(Long id);
-    public List<Shoe> findByBestRatingGreaterThanEqual(Integer rating);
+    List<Shoe> findByBestRatingGreaterThanEqual(Integer rating);
     void deleteById(Long id);
     List<Shoe> findAllByType(ShoeTypeEnum type);
     boolean validExtension(MultipartFile file) throws IOException;

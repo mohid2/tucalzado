@@ -3,22 +3,18 @@ package com.tucalzado.controller;
 
 import com.tucalzado.models.dto.FavoriteShoeDTO;
 import com.tucalzado.models.dto.UserDTO;
-import com.tucalzado.models.entity.FavoriteShoe;
+
 import com.tucalzado.models.entity.FavoriteShoeId;
 import com.tucalzado.service.IFavoriteShoeService;
 import com.tucalzado.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class FavoriteController {

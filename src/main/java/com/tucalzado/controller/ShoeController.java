@@ -126,7 +126,9 @@ public class ShoeController {
         return "redirect:/producto/" +shoeSaved.getId();
     }
 
-
-
-
+    @GetMapping("/eliminar/calzado/{id}")
+    public String deleteShoe(@PathVariable Long id) {
+        iShoeService.deleteById(id);
+        return "redirect:/tienda";
+    }
 }
