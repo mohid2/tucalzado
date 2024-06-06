@@ -11,6 +11,7 @@ import com.tucalzado.models.entity.User;
 import com.tucalzado.models.mapper.IAddressMapper;
 import com.tucalzado.models.mapper.IUserMapper;
 import com.tucalzado.repository.IAddressRepository;
+import com.tucalzado.repository.IPurchaseRepository;
 import com.tucalzado.repository.IRoleRepository;
 import com.tucalzado.repository.IUserRepository;
 import com.tucalzado.service.IUserService;
@@ -19,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +31,7 @@ public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
     private final IAddressRepository addressRepository;
     private final PasswordEncoder passwordEncoder;
+    private final IPurchaseRepository purchaseRepository;
     private final IRoleRepository roleRepository;
     private final IUserMapper userMapper;
     private final IAddressMapper addressMapper;
@@ -64,8 +67,16 @@ public class UserServiceImpl implements IUserService {
         return null;
     }
     @Override
-    public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
+    @Transactional
+    public boolean deleteUser(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            purchaseRepository.deleteByUser(user);
+            userRepository.delete(user);
+            return true;
+        }
+        return false;
     }
 
     @Override

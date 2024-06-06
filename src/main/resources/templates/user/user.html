@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head th:replace="~{layout/layout :: head}">
 </head>
 <body>
@@ -122,6 +121,9 @@
                 </div>
             </div>
         </form>
+        <div class="d-flex justify-content-center ">
+            <a type="button" href="#" class="link text-danger" th:onclick="confirmDelete([[${user.id}]])">Eliminar cuenta</a>
+        </div>
         <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -205,6 +207,15 @@
         </div>
     </div>
 </div>
+<footer th:replace="~{layout/layout :: footer}"></footer>
+<script src="assets/js/jquery-1.11.0.min.js"></script>
+<script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/templatemo.js"></script>
+<script src="assets/js/custom.js"></script>
+<script src="/assets/js/cartService.js"></script>
+<script src="/assets/js/geonames.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function openAddressModal(action) {
         const modalTitle = document.getElementById('addressModalLabel');
@@ -214,15 +225,22 @@
             modalTitle.textContent = 'Añadir Dirección';
         }
     }
+     function confirmDelete(userId) {
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/usuario/eliminar/" + userId;
+            }
+        })
+    }
 </script>
-<footer th:replace="~{layout/layout :: footer}"></footer>
-<script src="assets/js/jquery-1.11.0.min.js"></script>
-<script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
-<script src="assets/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/templatemo.js"></script>
-<script src="assets/js/custom.js"></script>
-<script src="/assets/js/cartService.js"></script>
-<script src="/assets/js/geonames.js"></script>
-
 </body>
 </html>

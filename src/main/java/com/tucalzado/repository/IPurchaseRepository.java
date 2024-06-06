@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface IPurchaseRepository extends JpaRepository<Purchase, Long> {
     List<Purchase> findAllByUser(User user);
+
+    void deleteByUser(User user);
 }
 

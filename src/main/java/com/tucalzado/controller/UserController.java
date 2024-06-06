@@ -4,29 +4,27 @@ package com.tucalzado.controller;
 import com.tucalzado.models.dto.AddressDTO;
 import com.tucalzado.models.dto.UserDTO;
 import com.tucalzado.service.IUserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-
+@RequiredArgsConstructor
 @Controller
 public class UserController {
 
     private final IUserService userService;
-
-    public UserController(IUserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping("/iniciar-sesion")
     public String getLogin(@RequestParam(value = "error", required = false) String error,
@@ -91,5 +89,30 @@ public class UserController {
     }
 
 
+
+    @GetMapping("usuario/eliminar/{userId}")
+    public String deleteUser(@PathVariable Long userId,Model model, HttpServletRequest request, HttpServletResponse response) {
+      boolean deleted =  userService.deleteUser(userId);
+      if(deleted){
+          invalidateUserSession(request, response);
+          return "redirect:/";
+      }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+            model.addAttribute("user", userService.getUserByUsername(username));
+        }
+        model.addAttribute("address",new AddressDTO());
+        return "redirect:/perfil";
+    }
+    private void invalidateUserSession(HttpServletRequest request, HttpServletResponse response) {
+        SecurityContextHolder.clearContext();
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        new SecurityContextLogoutHandler().logout(request, response, null);
+    }
 
 }

@@ -12,7 +12,7 @@ public interface IUserService {
     User createUser(UserDTO userDTO);
     UserDTO getUserByUsername(String name);
     User updateUser(UserDTO  userDTO);
-    void deleteUser(Long userId);
+    boolean deleteUser(Long userId);
     UserDTO getUserById(Long id);
     void updateAddressUser(AddressDTO addressDTO, Long userId);
 
