@@ -15,10 +15,6 @@
 	<description>Demo project for shoe store with spring boot and thymeleaf</description>
 	<properties>
 		<java.version>17</java.version>
-		<org.mapstruct.version>1.6.0.Beta2</org.mapstruct.version>
-		<org.projectlombok.version>1.18.16</org.projectlombok.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -53,7 +49,7 @@
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
-			<version>${org.mapstruct.version}</version>
+			<version>1.5.5.Final</version>
 		</dependency>
 		<!-- lombok dependency should not end up on classpath -->
 		<dependency>
@@ -109,7 +105,7 @@
 						<path>
 							<groupId>org.mapstruct</groupId>
 							<artifactId>mapstruct-processor</artifactId>
-							<version>${org.mapstruct.version}</version>
+							<version>1.5.5.Final</version>
 						</path>
 						<path>
 							<groupId>org.projectlombok</groupId>
@@ -123,19 +119,6 @@
 							<version>0.2.0</version>
 						</path>
 					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.4.1</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<mainClass>com.tucalzado.TucalzadoApplication</mainClass>
-						</manifest>
-					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
