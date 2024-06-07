@@ -1,3 +1,4 @@
+# Etapa 1: Construcción
 FROM maven:3.8.5-openjdk-17-slim AS build
 
 # Copia el archivo POM y descarga las dependencias del proyecto
@@ -6,7 +7,7 @@ RUN mvn dependency:go-offline
 
 # Copia el resto del código fuente y construye el proyecto
 COPY src ./src
-RUN mvn package -DskipTests
+RUN mvn package
 
 # Etapa 2: Ejecución
 FROM openjdk:17-jdk-slim
