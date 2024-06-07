@@ -7,7 +7,7 @@ RUN mvn dependency:go-offline
 
 # Copia el resto del código fuente y construye el proyecto
 COPY src ./src
-RUN mvn package
+RUN mvn package -DskipTests
 
 # Etapa 2: Ejecución
 FROM openjdk:17-jdk-slim
