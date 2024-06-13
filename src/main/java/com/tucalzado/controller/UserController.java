@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.Collections;
+
 @RequiredArgsConstructor
 @Controller
 public class UserController {
@@ -115,4 +118,10 @@ public class UserController {
         new SecurityContextLogoutHandler().logout(request, response, null);
     }
 
+    @GetMapping("/auth/check")
+    public ResponseEntity<?> checkAuthentication() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        boolean isAuthenticated = principal instanceof UserDetails;
+        return ResponseEntity.ok().body(Collections.singletonMap("authenticated", isAuthenticated));
+    }
 }

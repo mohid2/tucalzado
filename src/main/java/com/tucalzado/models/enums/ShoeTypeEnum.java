@@ -5,13 +5,14 @@ import lombok.Getter;
 @Getter
 public enum ShoeTypeEnum  {
     ZAPATOS("Zapatos"),
-    ZAPATOS_CLÁSICO("Zapatos clásicos"),
+    ZAPATOS_CLASICO("Zapatos clásicos"),
     ZAPATILLAS("Zapatillas"),
     ZAPATILLAS_DEPORTIVAS("Zapatillas deportivas"),
     SANDALIAS("Sandalías"),
-    BOTINES("Botines"),
+    CHANCLAS("Chanclas"),
     TACONES("Tacones"),
     PANTUFLAS("Pantuflas"),
+    MOCASINES("Mocasines"),
     BOTAS("Botas"),
     OTROS("Otros");
 

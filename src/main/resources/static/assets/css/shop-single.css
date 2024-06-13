@@ -1,0 +1,246 @@
+  .price-highlight {
+          color: #3CB430; /* Rojo brillante */
+          font-weight: bold;
+          text-shadow: 1px 1px 2px #000000; /* Sombra para hacer el texto más visible */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%; /* Asegura que el contenedor use toda la altura disponible */
+      }
+      .description-container {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+      }
+  #price-container .price-highlight p {
+        font-size: 50px !important;
+        font-weight: bold; /* Añadir grosor a la fuente */
+        text-align: center; /* Centrar el texto */
+}
+ @media (max-width: 1407px) {
+        #price-container .price-highlight p {
+            font-size: 30px !important; /* Ajusta este valor según sea necesario */
+        }
+
+        .card-body h1.h2 {
+            font-size: 24px; /* Ajusta este valor según sea necesario */
+        }
+
+        .description-container h6 {
+            font-size: 14px; /* Ajusta este valor según sea necesario */
+        }
+
+        .description-container ul li {
+            font-size: 10px; /* Ajusta este valor según sea necesario */
+        }
+
+        .list-inline-item h6 {
+            font-size: 14px; /* Ajusta este valor según sea necesario */
+        }
+
+        .btn-size {
+            font-size: 12px; /* Ajusta este valor según sea necesario */
+        }
+
+        .mt-4 .d-flex span {
+            font-size: 12px; /* Ajusta este valor según sea necesario */
+        }
+
+        .btn-lg {
+            font-size: 14px; /* Ajusta este valor según sea necesario */
+            padding: 10px 20px; /* Ajusta este valor según sea necesario */
+        }
+    }
+    @media (max-width: 440px) {
+        #price-container .price-highlight p {
+            font-size: 20px !important; /* Ajusta este valor según sea necesario */
+        }
+          .card-body h1.h2 {
+            font-size: 24px; /* Ajusta este valor según sea necesario */
+        }
+
+        .description-container h6 {
+            font-size: 14px; /* Ajusta este valor según sea necesario */
+        }
+
+        .description-container ul li {
+            font-size: 10px; /* Ajusta este valor según sea necesario */
+        }
+
+        .list-inline-item h6 {
+            font-size: 14px; /* Ajusta este valor según sea necesario */
+        }
+
+        .btn-size {
+            font-size: 12px; /* Ajusta este valor según sea necesario */
+        }
+
+        .mt-4 .d-flex span {
+            font-size: 12px; /* Ajusta este valor según sea necesario */
+        }
+
+        .btn-lg {
+            font-size: 14px; /* Ajusta este valor según sea necesario */
+            padding: 10px 20px; /* Ajusta este valor según sea necesario */
+        }
+    }
+
+      @media (max-width: 420px) {
+        #price-container .price-highlight p {
+            font-size: 20px !important; /* Ajusta este valor según sea necesario */
+        }
+
+        .description-container h6 {
+            font-size: 14px; /* Ajusta este valor según sea necesario */
+        }
+
+         .description-container ul li {
+                font-size: 12px !important; /* Ajusta este valor según sea necesario */
+            }
+
+        .list-inline-item {
+            font-size: 10px; /* Ajusta este valor según sea necesario */
+        }
+        .list-inline-talla{
+            font-size: 12px; /* Ajusta este valor aquí sea necesario */
+        }
+        .list-inline-item h6 {
+            font-size: 12px; /* Ajusta este valor según sea necesario */
+        }
+
+        .btn-size {
+            font-size: 12px; /* Ajusta este valor según sea necesario */
+        }
+
+        .mt-4 .d-flex span {
+            font-size: 12px; /* Ajusta este valor según sea necesario */
+        }
+        .mt-4 .d-flex span {
+             font-size: 12px; /* Ajusta este valor según sea necesario */
+            }
+
+        .mt-4 .d-flex i {
+             font-size: 12px; /* Ajusta este valor según sea necesario */
+
+        }
+    }
+
+
+    @media (max-width: 375px) {
+        #price-container .price-highlight p {
+            font-size: 17px !important; /* Ajusta este valor según sea necesario */
+        }
+
+        .description-container h6 {
+            font-size: 14px; /* Ajusta este valor según sea necesario */
+        }
+
+         .description-container ul li {
+                font-size: 12px !important; /* Ajusta este valor según sea necesario */
+            }
+
+        .list-inline-item {
+            font-size: 10px; /* Ajusta este valor según sea necesario */
+        }
+        .list-inline-talla{
+            font-size: 12px; /* Ajusta este valor aquí sea necesario */
+        }
+        .list-inline-item h6 {
+            font-size: 12px; /* Ajusta este valor según sea necesario */
+        }
+
+        .btn-size {
+            font-size: 12px; /* Ajusta este valor según sea necesario */
+        }
+
+        .mt-4 .d-flex span {
+            font-size: 12px; /* Ajusta este valor según sea necesario */
+        }
+        .mt-4 .d-flex span {
+             font-size: 12px; /* Ajusta este valor según sea necesario */
+            }
+
+        .mt-4 .d-flex i {
+             font-size: 12px; /* Ajusta este valor según sea necesario */
+
+        }
+        }
+
+    @media (max-width: 360px) {
+                #price-container .price-highlight p {
+                    font-size: 10px !important; /* Ajusta este valor según sea necesario */
+                }
+
+                .description-container h6 {
+                    font-size: 14px; /* Ajusta este valor según sea necesario */
+                }
+
+                 .description-container ul li {
+                        font-size: 11px !important; /* Ajusta este valor según sea necesario */
+                    }
+
+                .list-inline-item {
+                    font-size: 10px; /* Ajusta este valor según sea necesario */
+                }
+                .list-inline-talla{
+                    font-size: 11px; /* Ajusta este valor aquí sea necesario */
+                }
+                .list-inline-item h6 {
+                    font-size: 12px; /* Ajusta este valor según sea necesario */
+                }
+
+                .btn-size {
+                    font-size: 12px; /* Ajusta este valor según sea necesario */
+                }
+
+                .mt-4 .d-flex span {
+                    font-size: 12px; /* Ajusta este valor según sea necesario */
+                }
+                .mt-4 .d-flex span {
+                     font-size: 12px; /* Ajusta este valor según sea necesario */
+                    }
+
+                .mt-4 .d-flex i {
+                     font-size: 12px; /* Ajusta este valor según sea necesario */
+
+                }
+        }
+    @media (max-width: 390px) {
+                #price-container .price-highlight p {
+                    font-size: 17px !important; /* Ajusta este valor según sea necesario */
+                }
+
+                .description-container h6 {
+                    font-size: 14px; /* Ajusta este valor según sea necesario */
+                }
+
+                 .description-container ul li {
+                        font-size: 12px !important; /* Ajusta este valor según sea necesario */
+                    }
+
+                .list-inline-item {
+                    font-size: 10px; /* Ajusta este valor según sea necesario */
+                }
+                .list-inline-talla{
+                    font-size: 12px; /* Ajusta este valor aquí sea necesario */
+                }
+                .list-inline-item h6 {
+                    font-size: 12px; /* Ajusta este valor según sea necesario */
+                }
+
+                .btn-size {
+                    font-size: 12px; /* Ajusta este valor según sea necesario */
+                }
+
+                .mt-4 .d-flex span {
+                    font-size: 12px; /* Ajusta este valor según sea necesario */
+                }
+                .mt-4 .d-flex span {
+                     font-size: 12px; /* Ajusta este valor según sea necesario */
+                    }
+
+                .mt-4 .d-flex i {
+                     font-size: 12px; /* Ajusta este valor según sea necesario */
+
+                }
+    }

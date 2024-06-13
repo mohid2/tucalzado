@@ -1,11 +1,13 @@
 package com.tucalzado.service.impl;
 
 
+import com.tucalzado.models.dto.ShoeDTO;
 import com.tucalzado.models.entity.ImageUrl;
 import com.tucalzado.models.entity.Shoe;
 import com.tucalzado.models.entity.ShoeStock;
 import com.tucalzado.models.entity.ShoeStockId;
 import com.tucalzado.models.enums.ShoeTypeEnum;
+import com.tucalzado.models.mapper.IShoeMapper;
 import com.tucalzado.repository.*;
 import com.tucalzado.service.IShoeService;
 import com.tucalzado.service.IUploadFileService;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,24 +37,45 @@ public class ShoeServiceImpl implements IShoeService {
     private final IUploadFileService iUploadFileService;
     private final IItemRepository iItemRepository;
     private final IFavoriteShoeRepository iFavoriteShoeRepository;
+    private final IShoeMapper iShoeMapper;
     private static final List<String> SUPPORTED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png", "gif");
 
     @Override
-    public Page<Shoe> findFilteredAndPaginatedProducts(int page,String gender,String type, int pageSize) {
-        Pageable pageRequest = PageRequest.of(page, pageSize);
+    public Page<Shoe> findFilteredAndPaginatedProducts(int page,String gender,String type,String brand, int pageSize) {
         List<Shoe> filteredProducts = iShoeRepository.findAll();
 
         if (gender != null) {
             filteredProducts = filteredProducts.stream()
-                    .filter(product -> product.getGender().getGenderEnum().equalsIgnoreCase(gender))
+                    .filter(product -> normalize(product.getGender().getGenderEnum()).equalsIgnoreCase(normalize(gender)))
                     .collect(Collectors.toList());
         }
+
         if (type != null) {
             filteredProducts = filteredProducts.stream()
-                    .filter(product -> product.getType().getTypeEnum().equalsIgnoreCase(type))
+                    .filter(product -> normalize(product.getType().getTypeEnum()).equalsIgnoreCase(normalize(type)))
                     .collect(Collectors.toList());
         }
+
+        if (brand != null) {
+            filteredProducts = filteredProducts.stream()
+                    .filter(product -> normalize(product.getBrand()).equalsIgnoreCase(normalize(brand)))
+                    .collect(Collectors.toList());
+        }
+
+        Pageable pageRequest = PageRequest.of(page, pageSize);
         return PageUtils.createPage(filteredProducts, pageRequest);
+    }
+
+    private String normalize(String input) {
+        if (input == null) {
+            return null;
+        }
+        // Normaliza la cadena para eliminar acentos y otros caracteres diacríticos
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        // Elimina los caracteres diacríticos
+        normalized = normalized.replaceAll("\\p{M}", "");
+        // Convierte a minúsculas y elimina espacios adicionales
+        return normalized.trim().replaceAll("\\s+", " ").toLowerCase();
     }
 
     @Override
@@ -71,8 +96,7 @@ public class ShoeServiceImpl implements IShoeService {
             shoe.setImageUrl(imageUrls);
         }
         // Guardar el zapato primero
-//        Shoe savedShoe = iShoeRepository.save(shoe);
-        Shoe savedShoe = null;
+        Shoe savedShoe = iShoeRepository.save(shoe);
         ShoeStockSave(sizeStockMap, savedShoe);
         return savedShoe;
     }
@@ -122,6 +146,11 @@ public class ShoeServiceImpl implements IShoeService {
         return image != null;
     }
 
+    @Override
+    public List<String> findAllBrands() {
+        return iShoeRepository.findAllBrand();
+    }
+
     private String getFileExtension(String fileName) {
         if (fileName == null) {
             return null;
@@ -160,5 +189,10 @@ public class ShoeServiceImpl implements IShoeService {
     @Transactional(readOnly = true)
     public List<Shoe> findByBestRatingGreaterThanEqual(Integer rating) {
         return iShoeRepository.findByRatingGreaterThanEqual(rating);
+    }
+
+    @Override
+    public List<ShoeDTO> getShoeByContentName(String term) {
+        return iShoeRepository.findShoeByNameLikeIgnoreCase(term).stream().map(iShoeMapper::shoeToShoeDTO).toList();
     }
 }

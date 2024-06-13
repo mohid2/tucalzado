@@ -23,10 +23,10 @@
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left align-self-center">
-                                <h1 class="h1 text-success">Bienvenido a <b>Tutienda</b></h1>
+                                <h1 class="h1 text-success">Bienvenido a <b>TuCalzado</b></h1>
                                 <h3 class="h2">Tu Destino para una Experiencia de Compra Sin Contratiempos</h3>
                                 <p>
-                                    Bienvenido a Tutienda, tu destino principal para experimentar el futuro de las compras en línea.
+                                    Bienvenido a TuCalzado, tu destino principal para experimentar el futuro de las compras en línea.
                                 </p>
                             </div>
                         </div>
@@ -41,8 +41,10 @@
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left">
-                                <h1 class="h1 text-success">Descubre lo que te hace único</h1>
-                                <h3 class="h2">Encuentra tu estilo con nosotros</h3>
+                                <h1 class="h1 text-success">Tu destino para una experiencia de compra sin contratiempos</h1>
+                                <p>
+                                    ¡Descubre la emoción de encontrar lo que necesitas y más en TuCalzado!
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -56,10 +58,8 @@
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left">
-                                <h1 class="h1 text-success">Tu destino para una experiencia de compra sin contratiempos</h1>
-                                <p>
-                                    ¡Descubre la emoción de encontrar lo que necesitas y más en Tutienda!
-                                </p>
+                                <h1 class="h1 text-success">Descubre lo que te hace único</h1>
+                                <h3 class="h2">Encuentra tu estilo con nosotros</h3>
                             </div>
                         </div>
                     </div>
@@ -204,46 +204,45 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
     window.onload = function() {
-        Swal.fire({
-            title: '¡Bienvenido a Tutienda!',
-            text: 'Por favor, ten en cuenta que Tutienda es un proyecto de demostración y no representa una tienda de comercio electrónico real. Es parte de mi portafolio para mostrar habilidades en el desarrollo de aplicaciones web con tecnologías  como Spring Boot y Thymeleaf.',
-            icon: 'info',
-            confirmButtonText: 'Entendido'
-        });
-    };
+     Swal.fire({
+         title: '¡Bienvenido a TuCalzado!',
+         text: 'Por favor, ten en cuenta que TuCalzado es un proyecto de demostración y no representa una tienda de comercio electrónico real. Es parte de mi portafolio para mostrar habilidades en el desarrollo de aplicaciones web con tecnologías como Spring Boot y Thymeleaf. Al registrarte en la página, te registrarás directamente con el rol de administrador para que puedas ver todas las funcionalidades del proyecto.',
+         icon: 'info',
+         confirmButtonText: 'Entendido'
+     });
+ };
+
 </script>
 <script th:inline="javascript">
-    $(document).ready(function() {
-        $('#carousel-related-product').slick({
-            infinite: true,
-            arrows: false,
-            slidesToShow: 4,
-            slidesToScroll: 4,
-            dots: true,
-            responsive: [{
-                    breakpoint: 1024,
-                    settings: {
-                        slidesToShow: 3,
-                        slidesToScroll: 4
-                    }
-                },
-                {
-                    breakpoint: 600,
-                    settings: {
-                        slidesToShow: 2,
-                        slidesToScroll: 4
-                    }
-                },
-                {
-                    breakpoint: 480,
-                    settings: {
-                        slidesToShow: 2,
-                        slidesToScroll: 4
-                    }
-                }
-            ]
-        });
-    });
+    $('#carousel-related-product').slick({
+           infinite: true,
+           arrows: false,
+           slidesToShow: 4,
+           slidesToScroll: 3,
+           dots: true,
+           responsive: [{
+                   breakpoint: 1024,
+                   settings: {
+                       slidesToShow: 3,
+                       slidesToScroll: 3
+                   }
+               },
+               {
+                   breakpoint: 600,
+                   settings: {
+                       slidesToShow: 2,
+                       slidesToScroll: 3
+                   }
+               },
+               {
+                   breakpoint: 480,
+                   settings: {
+                       slidesToShow: 2,
+                       slidesToScroll: 3
+                   }
+               }
+           ]
+       });
 </script>
 </body>
 </html>

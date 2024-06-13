@@ -18,13 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private final UserDetailsService userDetailsService;
-
     String[] resources = new String[]{"assets/css/**", "assets/js/**", "assets/img/**", "assets/fonts/**", "assets/vendor/**","assets/webfonts/**"};
-
-    public WebSecurityConfig(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -37,7 +31,8 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz->
                         authz.requestMatchers(resources).permitAll()
-                                .requestMatchers("/","/tienda","/producto/**","/registro","/iniciar-sesion","/sobre-nosotros","/contacto","/error/**").permitAll()
+                                .requestMatchers("/","/tienda","/producto/**","/registro","/iniciar-sesion","/sobre-nosotros",
+                                        "/contacto","/error/**","/auth/check","/cargar-productos/**").permitAll()
                                 .requestMatchers("/agregar/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
                 .formLogin((form) -> form

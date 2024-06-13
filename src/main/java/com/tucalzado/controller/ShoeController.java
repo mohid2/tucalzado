@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,29 +33,32 @@ public class ShoeController {
     private final IShoeService iShoeService;
     private final IShoeSizeRepository iShoeSizeRepository;
 
-
     @GetMapping("/tienda")
-    public String getShop(HttpServletRequest request, @RequestParam(name = "page", defaultValue = "0") int page,
+    public String getShop(HttpServletRequest request,
+                          @RequestParam(name = "page", defaultValue = "0") int page,
                           @RequestParam(name = "gender", required = false) String gender,
                           @RequestParam(name = "type", required = false) String type,
+                          @RequestParam(name = "brand", required = false) String brand,
                           Model model) {
         String userAgent = request.getHeader("User-Agent");
         int itemsPerPage = 9; // Número predeterminado de elementos por página
-
         // Verificar si el User-Agent indica que es un dispositivo móvil
         if (userAgent != null && userAgent.toLowerCase().contains("mobile")) {
             itemsPerPage = 10; // Ajustar el número de elementos por página para dispositivos móviles
         }
-
-        Page<Shoe> productListPage = iShoeService.findFilteredAndPaginatedProducts(page,gender,type, itemsPerPage);
-        String[] queryParams = buildQueryParams(type,gender);
-        PageRender<Shoe> pageRender = new PageRender<>("/tienda", productListPage, queryParams);
+        // Si se ha seleccionado un filtro, reiniciar a la página 0
+        if (request.getParameterMap().containsKey("gender") || request.getParameterMap().containsKey("type") || request.getParameterMap().containsKey("brand")) {
+            page = 0;
+        }
+        Page<Shoe> productListPage = iShoeService.findFilteredAndPaginatedProducts(page, gender, type, brand, itemsPerPage);
+        PageRender<Shoe> pageRender = new PageRender<>("/tienda", productListPage, buildQueryParams(type, gender, brand));
         model.addAttribute("shoes", productListPage.getContent());
         model.addAttribute("page", pageRender);
-        model.addAttribute("title", "Tienda");
+        model.addAttribute("brands", iShoeService.findAllBrands());
         return "shop";
     }
-    private String[] buildQueryParams(String type, String gender) {
+
+    private String[] buildQueryParams(String type, String gender, String brand) {
         List<String> queryParams = new ArrayList<>();
         if (type != null && !type.isEmpty()) {
             queryParams.add("type=" + type);
@@ -61,9 +66,11 @@ public class ShoeController {
         if (gender != null && !gender.isEmpty()) {
             queryParams.add("gender=" + gender);
         }
+        if (brand != null && !brand.isEmpty()) {
+            queryParams.add("brand=" + brand);
+        }
         return queryParams.isEmpty() ? null : queryParams.toArray(new String[0]);
     }
-
     @GetMapping("/producto/{id}")
     public String getProduct(@PathVariable Long id, Model model) {
         Optional<Shoe> shoeOptional = iShoeService.findById(id);
@@ -81,7 +88,9 @@ public class ShoeController {
         List<String> descriptionLines = Arrays.asList(shoe.getDescription().split("\n"));
         model.addAttribute("shoe", shoe);
         model.addAttribute("descriptionLines", descriptionLines);
-        model.addAttribute("shoes", iShoeService.findAllByType(shoe.getType()));
+        List<Shoe> shoes = iShoeService.findAllByType(shoe.getType());
+        shoes.remove(shoe);
+        model.addAttribute("shoes", shoes);
         return "shop-single";
     }
 
@@ -102,7 +111,6 @@ public class ShoeController {
                            @RequestParam Map<String, String> formParams,
                            @RequestParam(name = "imag") MultipartFile imag,
                            Model model) throws IOException {
-
         // Validar imágenes primarias
         if (imag == null || imag.isEmpty() || !iShoeService.validExtension(imag)) {
             result.rejectValue("imagePrimary", "error.shoe", "La imagen principal es inválida o no está soportada");
@@ -124,6 +132,11 @@ public class ShoeController {
         }
        Shoe shoeSaved = iShoeService.save(shoe, images, imag, formParams);
         return "redirect:/producto/" +shoeSaved.getId();
+    }
+
+    @GetMapping(value ="/cargar-productos/{term}")
+    public ResponseEntity<List<ShoeDTO>> getShoes(@PathVariable String term) {
+        return new ResponseEntity<>(iShoeService.getShoeByContentName(term), HttpStatus.OK);
     }
 
     @GetMapping("/eliminar/calzado/{id}")

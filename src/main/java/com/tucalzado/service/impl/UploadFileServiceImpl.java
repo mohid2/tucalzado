@@ -78,7 +78,6 @@ public class UploadFileServiceImpl implements IUploadFileService {
                 // Si fue exitoso, también puedes eliminar la entrada correspondiente de tu base de datos
                 // asumiendo que tienes una relación entre el nombre del archivo y el registro en tu repositorio
                 Optional<ImageUrl> imageUrlOptional = imageUrlRepository.findByUrlContaining(filename);
-                System.out.println();
                 imageUrlOptional.ifPresent(imageUrlRepository::delete);
                 return true;
             } else {

@@ -67,16 +67,14 @@ public class PurchaseController {
     public String getPurchaseByUser(@PathVariable Long id, Model model) {
         Purchase purchase = purchaseService.getPurchaseById(id);
         UserDTO user = userService.getUserById(purchase.getUser().getId());
-
         // Asume que purchaseService.getPurchaseById(id) y userService.getUserById(id) ya están implementados
         purchase.getItems().forEach(item -> {
             boolean hasRated = ratingService.hasRated(user, item.getShoe());
             item.setHasRated(hasRated); // Supone que has agregado este campo en el item
-            System.out.println(item);
         });
         model.addAttribute("purchase", purchase);
         model.addAttribute("user", user);
-        return "/purchases_details";
+        return "purchases_details";
     }
 
     @GetMapping("/invoice/pdf/{id}")

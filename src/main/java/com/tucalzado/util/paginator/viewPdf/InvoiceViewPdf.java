@@ -45,7 +45,7 @@ public class InvoiceViewPdf extends AbstractPdfView {
         cell.setBackgroundColor(new Color(230, 230, 230));
 
         cell.addElement(new Paragraph("Datos de la empresa emisora", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
-        cell.addElement(new Paragraph("Nombre empresa: tutienda"));
+        cell.addElement(new Paragraph("Nombre empresa: TuCalzado"));
         cell.addElement(new Paragraph("Teléfono: 010-020-0340"));
         cell.addElement(new Paragraph("Email:  info@company.com"));
         cell.addElement(new Paragraph("Dirección de la Empresa : 123 Consectetur at ligula 10660"));

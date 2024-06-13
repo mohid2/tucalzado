@@ -26,6 +26,16 @@
         filter: grayscale(100%);
         opacity: 0.5;
     }
+
+     <style>
+        .ui-menu-item-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        .ui-menu-item-wrapper img {
+            max-width: 50px;
+            margin-right: 10px;
+        }
 </style>
 <body>
 <header th:replace="~{layout/layout :: header}">
@@ -39,7 +49,7 @@
             <ul class="list-unstyled templatemo-accordion">
                 <!-- Género -->
                 <li class="pb-3 shop-top-menu">
-                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#" id="toggle-gender">
+                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" id="toggle-gender">
                         Género
                         <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
                     </a>
@@ -51,7 +61,7 @@
                 </li>
                 <!-- Calzado -->
                 <li class="pb-3 shop-top-menu">
-                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#" id="toggle-footwear">
+                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none"  id="toggle-footwear">
                         Calzado
                         <i class="pull-right fa fa-fw fa-chevron-circle-down mt-1"></i>
                     </a>
@@ -60,11 +70,25 @@
                         <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="zapatos clásicos">Zapatos clásicos</a></li>
                         <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="zapatillas">Zapatillas</a></li>
                         <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="zapatillas deportivas">Zapatillas deportivas</a></li>
-                        <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="botas">Botas</a></li>
                         <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="sandalías">Sandalías</a></li>
-                        <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="botines">Botines</a></li>
+                        <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="chanclas">Chanclas</a></li>
+                        <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="pantuflas">Pantuflas</a></li>
+                        <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="mocasines">Mocasines</a></li>
                         <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="tacones">Tacones</a></li>
+                        <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="botas">Botas</a></li>
                         <li><a class="text-decoration-none filter-link" href="#" data-filter="type" data-value="otros">Otros</a></li>
+                    </ul>
+                </li>
+                <li class="pb-3 shop-top-menu">
+                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" >
+                        Marcas
+                        <i class="pull-right fa fa-fw fa-chevron-circle-down mt-1"></i>
+                    </a>
+                    <ul id="collapseTwo" class="collapse list-unstyled pl-3">
+                        <!-- Itera sobre la lista de marcas -->
+                        <li th:each="brand : ${brands}">
+                            <a class="text-decoration-none filter-link" th:text="${brand}" href="#" data-filter="brand" th:data-value="${brand}"></a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -87,6 +111,9 @@
                         </li>
                     </ul>
                 </div>
+                <div class="form-inline col-md-6 pb-3">
+                    <input class="form-control mr-sm-2" id="search" type="search" placeholder="Buscar..." aria-label="Search">
+                </div>
             </div>
             <div class="container" id="productos-container">
                 <div class="row">
@@ -103,7 +130,7 @@
                                 <!-- Contenido del producto -->
                                 <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                                     <ul class="list-unstyled">
-                                        <li><a class="btn btn-success text-white" href="#" th:onclick="addFavoriteProduct([[${shoe}]])"><i class="far fa-heart"></i></a></li>
+                                        <li><button class="btn btn-success text-white"   th:onclick="addFavoriteProduct([[${shoe}]])"><i class="far fa-heart"></i></button></li>
                                         <li><a class="btn btn-success text-white mt-2" th:href="@{/producto/{id}(id=${shoe.id})}"><i class="far fa-eye"></i></a></li>
                                     </ul>
                                 </div>
@@ -258,14 +285,22 @@
 <!-- Start Footer -->
 <footer th:replace="~{layout/layout :: footer}">
 </footer>
-<script src="assets/js/jquery-1.11.0.min.js"></script>
-<script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
-<script src="assets/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/templatemo.js"></script>
-<script src="assets/js/custom.js"></script>
-<script src="assets/js/cartService.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
+<script th:src="@{assets/js/jquery-1.11.0.min.js}"></script>
+<script th:src="@{assets/js/jquery-migrate-1.2.1.min.js}"></script>
+<script th:src="@{assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{assets/js/templatemo.js}"></script>
+<script th:src="@{assets/js/custom.js}"></script>
+<script th:src="@{assets/js/cartService.js}"></script>
+<script th:src="@{assets/js/products-favorite.js}"></script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+<!-- jQuery -->
+<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+<!-- jQuery UI CSS -->
+<link th:href="@{https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css}" rel="stylesheet">
+<!-- jQuery UI JavaScript -->
+<script th:src="@{https://code.jquery.com/ui/1.12.1/jquery-ui.min.js}"></script>
+
+<script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function() {
         const filterLinks = document.querySelectorAll(".filter-link");
 
@@ -300,8 +335,40 @@
      window.location.href = urlString;
  }
     });
-
 </script>
-<script src="assets/js/products-favorite.js"></script>
+<script th:inline="javascript">
+    $(function() {
+        $("#search").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "/cargar-productos/" + request.term,
+                    type: "GET",
+                    success: function(data) {
+
+                        response($.map(data, function(item) {
+                            return {
+                                label: item.name,
+                                value: item.name,
+                                id: item.id,
+                                imageUrl: item.imagePrimary
+                            };
+                        }));
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error in AJAX request: ", error);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                window.location.href = "/producto/" + ui.item.id;
+            },
+            minLength: 2
+        }).autocomplete("instance")._renderItem = function(ul, item) {
+            return $("<li>")
+                .append("<div class='ui-menu-item-wrapper'><img src='" + item.imageUrl + "' alt='" + item.label + "'><span>" + item.label + "</span></div>")
+                .appendTo(ul);
+        };
+    });
+</script>
 </body>
 </html>
